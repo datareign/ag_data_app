@@ -1,0 +1,526 @@
+Client,Farm,Field,acres,senTile,unq_fldid,type,elevation,utm_zone,name,state
+Foster Land and Cattle,North Slope,15,132.8139654,12TVP,3,active,easternIdaho_32612,32612,flc_ns_15,ID
+Keith Wilcox,Madison,Brown 6,113.5364563,12TVP,4,active,easternIdaho_32612,32612,,ID
+Erickson,Herbert,1 without corners,147.9280797,12TVP,5,active,easternIdaho_32612,32612,erk_herb_1nc,ID
+Keith Wilcox,Madison,Moss,71.06926831,12TVP,6,active,easternIdaho_32612,32612,,ID
+Parkinson Foundation Seed,Ellis,Pivot 6,126.3806869,11TQK,1,active,salmon_32611,32611,,ID
+Parkinson Foundation Seed,Sulfer Creek,Pivot 18,65.83990659,11TQK,2,active,salmon_32611,32611,pfs_sulfer_18,ID
+Keith Wilcox,Jefferson,153,83.39998676,12TUP,67,active,,32612,,ID
+Parkinson Foundation Seed,Ellis,Pivot 3,126.0979379,11TQK,68,active,salmon_32611,32611,pfs_ellis_3,ID
+Parkinson Foundation Seed,May,Pivot 12,160.3605796,11TQK,69,active,salmon_32611,32611,pfs_may_12,ID
+Keith Wilcox,Madison,53,73.510604,12TVP,70,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,9,150.6262714,12TVP,63,active,easternIdaho_32612,32612,,ID
+Webster Inc,,14,126.7012226,12TVP,64,active,easternIdaho_32612,32612,,ID
+Erickson,Herbert,3,36.52865147,12TVP,65,active,easternIdaho_32612,32612,erk_herb_3,ID
+Foster Land and Cattle,North Slope,11,109.6415619,12TVP,66,active,easternIdaho_32612,32612,flc_ns_11,ID
+Russel Schwendiman Farms,Thunderridge,T6,180.815818,12TVP,59,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Thunderridge,T22,140.7890818,12TVP,60,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,23,50.35964971,12TVP,61,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Jefferson,147,132.173361,12TUP,62,active,,32612,,ID
+Parkinson Foundation Seed,Ellis,Pivot 4,104.3819968,11TQK,55,active,salmon_32611,32611,,ID
+Keith Wilcox,Jefferson,151 North,63.62924917,12TUP,56,active,,32612,,ID
+Russel Schwendiman Farms,Home Place,10,18.95207593,12TVP,57,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,32,168.329609,12TVP,58,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Home Place,4,82.16105045,12TVP,51,active,easternIdaho_32612,32612,,ID
+Parkinson Foundation Seed,May,Pivot 11,124.8898255,11TQK,53,active,salmon_32611,32611,pfs_may_11,ID
+Keith Wilcox,Jefferson,173,130.8693316,12TUP,54,active,,32612,,ID
+Foster Land and Cattle,North Slope,10,133.6659072,12TVP,47,active,easternIdaho_32612,32612,flc_ns_10,ID
+Keith Wilcox,Jefferson,154,73.94985132,12TUP,48,active,,32612,,ID
+Keith Wilcox,Madison,52,68.30283373,12TVP,49,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Thunderridge,T14,129.5685383,12TVP,50,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,84,155.4470626,12TVP,43,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,North Slope,12,149.0903621,12TVP,44,active,easternIdaho_32612,32612,flc_ns_12,ID
+Keith Wilcox,Madison,11,21.16741462,12TVP,45,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,North Slope,C,22.48209785,12TVP,46,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,22,32.52364864,12TVP,39,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Swan Valley,3_4 pivot,119.8092663,12TVP,40,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,90,143.8507482,12TVP,41,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,69 South,23.6933372,12TVP,35,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Thunderridge,T5,84.03699764,12TVP,36,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Thunderridge,T23,133.2668358,12TVP,37,active,easternIdaho_32612,32612,,ID
+Bart Webster,,2 West,69.54072794,12TVP,38,active,easternIdaho_32612,32612,,ID
+Parkinson Foundation Seed,Ellis,Pivot 5,73.77503977,11TQK,31,active,salmon_32611,32611,pfs_ellis_5,ID
+Keith Wilcox,Jefferson,150,77.58383443,12TUP,32,active,,32612,,ID
+Russel Schwendiman Farms,Home Place,11,23.53634313,12TVP,33,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,North Slope,7,139.6670511,12TVP,34,active,easternIdaho_32612,32612,flc_ns_7,ID
+Russel Schwendiman Farms,Swan Valley,Russ Pivot,133.1431231,12TVP,27,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Jefferson,167,130.970578,12TUP,28,active,,32612,,ID
+Foster Land and Cattle,North Slope,16,129.6464093,12TVP,29,active,easternIdaho_32612,32612,flc_ns_16,ID
+Parkinson Foundation Seed,May,Pivot 10,122.3925105,11TQK,30,active,salmon_32611,32611,pfs_may_10,ID
+Keith Wilcox,Jefferson,156_157,128.9477608,12TUP,23,active,,32612,,ID
+Russel Schwendiman Farms,Thunderridge,T17,24.80577356,12TVP,24,active,easternIdaho_32612,32612,,ID
+Parkinson Foundation Seed,Sulfer Creek,Pivot 16 West,74.60884207,11TQK,25,active,salmon_32611,32611,,ID
+Russel Schwendiman Farms,Home Place,5,81.99900949,12TVP,26,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,43,260.4721946,12TVP,19,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,51,138.1690646,12TVP,21,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,87,60.27952704,12TVP,15,active,easternIdaho_32612,32612,,ID
+Webster Inc,,10,168.1047839,12TVP,16,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Jefferson,Cellar,132.6296878,12TUP,17,active,,32612,,ID
+Keith Wilcox,Madison,76,152.7398149,12TVP,18,active,easternIdaho_32612,32612,,ID
+Erickson,Herbert,4 and part of 5,194.1128818,12TVP,131,active,easternIdaho_32612,32612,erk_herb_4and5,ID
+Keith Wilcox,Madison,42,147.1358999,12TVP,11,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,92,70.36749605,12TVP,132,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Home Place,9,125.8362383,12TVP,133,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Jefferson,145,276.9493601,12TUP,13,active,,32612,,ID
+Russel Schwendiman Farms,Thunderridge,T1,182.2064246,12TVP,134,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Jefferson,177,128.6127239,12TUP,14,active,,32612,,ID
+Russel Schwendiman Farms,Home Place,1,144.0948773,12TVP,127,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Jefferson,Northeast 152,134.811084,12TUP,7,active,,32612,,ID
+Russel Schwendiman Farms,Thunderridge,T9,27.33493109,12TVP,128,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Home Place,2,151.2473422,12TVP,8,active,easternIdaho_32612,32612,,ID
+Parkinson Foundation Seed,May,Pivot 14,35.35940668,11TQK,129,active,salmon_32611,32611,,ID
+Russel Schwendiman Farms,Thunderridge,T4,133.9930079,12TVP,9,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,85,148.2398907,12TVP,130,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Thunderridge,T24,15.8463679,12TVP,10,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,North Slope,A,24.9291413,12TVP,123,active,easternIdaho_32612,32612,flc_ns_a,ID
+Keith Wilcox,Jefferson,149,108.3042637,12TUP,124,active,,32612,,ID
+Keith Wilcox,Madison,67,82.93606734,12TVP,125,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Thunderridge,T13,188.929079,12TVP,126,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,72,148.9494449,12TVP,119,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,63,193.3264363,12TVP,120,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Jefferson,175,126.693941,12TUP,121,active,,32612,,ID
+Russel Schwendiman Farms,Thunderridge,T11,238.9042362,12TVP,115,active,easternIdaho_32612,32612,,ID
+Bart Webster,,12,198.1097274,12TVP,116,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Johnson,18,89.62341174,12TVP,117,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,North Slope,5,65.58400193,12TVP,118,active,easternIdaho_32612,32612,flc_ns_5,ID
+Parkinson Foundation Seed,Ellis,Pivot 9,9.788562517,11TQK,111,active,salmon_32611,32611,,ID
+Russel Schwendiman Farms,Swan Valley,Handlines,128.4272364,12TVP,112,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,21,38.90134228,12TVP,113,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,North Slope,1,111.2280347,12TVP,114,active,easternIdaho_32612,32612,flc_ns_1,ID
+Russel Schwendiman Farms,Home Place,12,139.7490438,12TVP,107,active,easternIdaho_32612,32612,,ID
+Val Schwendiman Farms,Val Lower Farm,Lower Place 474,472.051288,12TVP,108,active,easternIdaho_32612,32612,vshw_lower_474,ID
+Keith Wilcox,Madison,88,118.4861093,12TVP,109,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Thunderridge,T20,135.6636373,12TVP,110,active,easternIdaho_32612,32612,,ID
+Parkinson Foundation Seed,May,Pivot 13,21.40259276,11TQK,103,active,salmon_32611,32611,,ID
+Keith Wilcox,Madison,Brown 4,240.339974,12TVP,104,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,North Slope,9,133.5922291,12TVP,105,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,North Slope,18,69.14891035,12TVP,106,active,easternIdaho_32612,32612,flc_ns_18,ID
+Russel Schwendiman Farms,Home Place,13,159.2859129,12TVP,99,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Jefferson,171,128.4398652,12TUP,100,active,,32612,,ID
+Russel Schwendiman Farms,Home Place,6,87.34740356,12TVP,101,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Thunderridge,T8,139.7163404,12TVP,102,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Jefferson,North Half 166,59.25926893,12TUP,95,active,,32612,,ID
+Keith Wilcox,Madison,83,164.9954455,12TVP,97,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,64,152.6604801,12TVP,98,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,North Slope,13,133.5589912,12TVP,92,active,easternIdaho_32612,32612,flc_ns_13,ID
+Parkinson Foundation Seed,Ellis,Pivot 2,133.5193207,11TQK,93,active,salmon_32611,32611,pfs_ellis_2,ID
+Keith Wilcox,Jefferson,155,84.51276536,12TUP,94,active,,32612,,ID
+Russel Schwendiman Farms,Thunderridge,T7,134.2217613,12TVP,87,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,54,152.1440357,12TVP,88,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Jefferson,146,136.0568556,12TUP,89,active,,32612,,ID
+Webster Inc,,13,200.0488603,12TVP,90,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,91,142.8754933,12TVP,83,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,North Slope,B,13.65193165,12TVP,85,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,31,45.67988322,12TVP,86,active,easternIdaho_32612,32612,,ID
+Parkinson Foundation Seed,Sulfer Creek,Pivot 16 East,74.99561725,11TQK,79,active,salmon_32611,32611,,ID
+Foster Land and Cattle,North Slope,8,136.9750092,12TVP,80,active,easternIdaho_32612,32612,flc_ns_8,ID
+Keith Wilcox,Madison,74,133.0192168,12TVP,81,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Jefferson,134,122.7266478,12TUP,82,active,,32612,,ID
+Foster Land and Cattle,North Slope,6,151.5146271,12TVP,75,active,easternIdaho_32612,32612,flc_ns_6,ID
+Russel Schwendiman Farms,Home Place,7,63.86293795,12TVP,76,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,North Slope,4,42.51343499,12TVP,77,active,easternIdaho_32612,32612,flc_ns_4,ID
+Keith Wilcox,Jefferson,162,126.8998336,12TUP,78,active,,32612,,ID
+Keith Wilcox,Madison,Brown 3,101.7804287,12TVP,71,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,65,220.1842096,12TVP,72,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Thunderridge,T15,198.9398971,12TVP,73,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Jefferson,172,121.1190583,12TUP,74,active,,32612,,ID
+Keith Wilcox,Jefferson,David Burtenshaw,122.7405619,12TUP,195,active,,32612,,ID
+Keith Wilcox,Jefferson,Gunderson Home,143.9043338,12TUP,196,active,,32612,,ID
+Keith Wilcox,Jefferson,Gunderson Swamp,145.3286377,12TUP,197,active,,32612,,ID
+Keith Wilcox,Jefferson,Gunderson 7/8 Pivot,127.9962283,12TUP,198,active,,32612,,ID
+Keith Wilcox,Jefferson,Rob Shively 60,58.20840932,12TUP,191,active,,32612,,ID
+Keith Wilcox,Jefferson,Shively Lake Pivot 1,109.8579916,12TUP,192,active,,32612,,ID
+Keith Wilcox,Jefferson,Jim Shively,127.7593082,12TUP,193,active,,32612,,ID
+Keith Wilcox,Jefferson,Rob Shively,136.3792103,12TUP,194,active,,32612,,ID
+Keith Wilcox,Jefferson,Don Burtenshaw,130.7410053,12TUP,187,active,,32612,,ID
+Keith Wilcox,Jefferson,Shively Siddoway Corn 6,128.9309447,12TUP,188,active,,32612,,ID
+Keith Wilcox,Jefferson,Shively 15 and 16,63.90991686,12TUP,189,active,,32612,,ID
+Keith Wilcox,Jefferson,Burtenshaw Shively,118.5754093,12TUP,190,active,,32612,,ID
+Russel Schwendiman Farms,Thunderridge,South Piece,154.0493953,12TVP,371,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Thunderridge,T12,215.0362355,12TVP,184,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Jefferson,Hartwell Wiper,63.73000242,12TUP,185,active,,32612,,ID
+Keith Wilcox,Jefferson,Siddoway 7,131.5520528,12TUP,186,active,,32612,,ID
+Keith Wilcox,Jefferson,Hartwell,47.68183853,12TUP,179,active,,32612,,ID
+Keith Wilcox,Madison,24,38.67158726,12TVP,180,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,North 55,137.4542983,12TVP,181,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Thunderridge,T16,102.4725915,12TVP,182,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,86,143.2150047,12TVP,175,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,69,113.3118489,12TVP,176,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,68,70.72006147,12TVP,177,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Thunderridge,T3,65.00881341,12TVP,178,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,South 56,147.5453594,12TVP,171,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Thunderridge,T25,145.1472592,12TVP,172,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,41,150.251252,12TVP,173,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Jefferson,176,125.7232174,12TUP,174,active,,32612,,ID
+Erickson,Herbert,2,148.9158313,12TVP,167,active,easternIdaho_32612,32612,erk_herb_2,ID
+Keith Wilcox,Madison,93,145.0015839,12TVP,168,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,89,65.50647573,12TVP,169,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Home Place,3,98.83364899,12TVP,170,active,easternIdaho_32612,32612,,ID
+Parkinson Foundation Seed,Sulfer Creek,Pivot 19,241.7689747,11TQK,165,active,salmon_32611,32611,pfs_sulfer_19,ID
+Keith Wilcox,Madison,Brown 7,161.1458412,12TVP,166,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,12_13,205.3097295,12TVP,159,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,North Slope,3 South,144.1819589,12TVP,526,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Thunderridge,T19,136.0536013,12TVP,161,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Jefferson,165,123.8804701,12TUP,162,active,,32612,,ID
+Keith Wilcox,Jefferson,169,62.44278117,12TUP,155,active,,32612,,ID
+Russel Schwendiman Farms,Home Place,8,129.6107823,12TVP,156,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Jefferson,Big 142,161.9062311,12TUP,157,active,,32612,,ID
+Russel Schwendiman Farms,Thunderridge,T2,165.9924397,12TVP,158,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Jefferson,161,65.07147052,12TUP,151,active,,32612,,ID
+Parkinson Foundation Seed,May,Pivot 15,44.38360569,11TQK,152,active,salmon_32611,32611,pfs_may_15,ID
+Keith Wilcox,Jefferson,Mini 143,35.16264932,12TUP,153,active,,32612,,ID
+Bart Webster,,2 East,73.99466803,12TVP,154,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Thunderridge,T10,131.8236078,12TVP,147,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Home Place,14,19.99441155,12TVP,148,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Jefferson,168,131.2198182,12TUP,149,active,,32612,,ID
+Foster Land and Cattle,North Slope,17,124.0761068,12TVP,150,active,easternIdaho_32612,32612,flc_ns_17,ID
+Keith Wilcox,Madison,Brown 5,102.1848198,12TVP,143,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,Brown 8,165.2619314,12TVP,144,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Jefferson,148,87.26744129,12TUP,145,active,,32612,,ID
+Keith Wilcox,Madison,Brown South Dry,173.0513706,12TVP,146,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,94,143.038012,12TVP,139,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Thunderridge,T18,137.7006103,12TVP,140,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Johnson,19,165.5709827,12TVP,141,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Jefferson,151 South,72.1682688,12TUP,142,active,,32612,,ID
+Keith Wilcox,Jefferson,Dalling Hunter 174,137.9031257,12TUP,135,active,,32612,,ID
+Parkinson Foundation Seed,Ellis,Pivot 8,7.125515421,11TQK,136,active,salmon_32611,32611,,ID
+Russel Schwendiman Farms,Swan Valley,Old School Dry,188.7500113,12TVP,137,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,North Slope,2 North,135.7580025,12TVP,138,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,River Side,7,130.6482611,12TVP,259,active,easternIdaho_32612,32612,flc_rs_7,ID
+Foster Land and Cattle,River Side,9,69.0140876,12TVP,260,active,easternIdaho_32612,32612,flc_rs_9,ID
+Foster Land and Cattle,River Side,8,89.39050538,12TVP,261,active,easternIdaho_32612,32612,flc_rs_8,ID
+Foster Land and Cattle,Valley,Sondregger,94.96787364,12TVP,262,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,River Side,3,99.96908694,12TVP,255,active,easternIdaho_32612,32612,flc_rs_3,ID
+Foster Land and Cattle,River Side,4,93.3582762,12TVP,256,active,easternIdaho_32612,32612,flc_rs_4,ID
+Foster Land and Cattle,River Side,5,61.01214426,12TVP,257,active,easternIdaho_32612,32612,flc_rs_5,ID
+Foster Land and Cattle,River Side,6,106.5786946,12TVP,258,active,easternIdaho_32612,32612,flc_rs_6,ID
+Foster Land and Cattle,River Side,1,133.8957059,12TVP,251,active,easternIdaho_32612,32612,flc_rs_1,ID
+Foster Land and Cattle,River Side,1A,21.46359128,12TVP,252,active,easternIdaho_32612,32612,flc_rs_1a,ID
+Foster Land and Cattle,River Side,2,54.7680923,12TVP,253,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,River Side,2A,15.89005695,12TVP,254,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,South Slope,2,118.389157,12TVP,247,active,easternIdaho_32612,32612,flc_ss_2,ID
+Foster Land and Cattle,South Slope,1,72.64768897,12TVP,248,active,easternIdaho_32612,32612,flc_ss_1,ID
+Foster Land and Cattle,River Side,Heise,89.81349506,12TVP,249,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,River Side,Shoups,40.43681379,12TVP,250,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,South Slope,8,30.72373988,12TVP,243,active,easternIdaho_32612,32612,flc_ss_8,ID
+Foster Land and Cattle,South Slope,4A,35.15916929,12TVP,244,active,easternIdaho_32612,32612,flc_ss_4a,ID
+Foster Land and Cattle,South Slope,4,43.71110402,12TVP,245,active,easternIdaho_32612,32612,flc_ss_4,ID
+Foster Land and Cattle,South Slope,3,106.5381862,12TVP,246,active,easternIdaho_32612,32612,flc_ss_3,ID
+Foster Land and Cattle,South Slope,5,84.06782732,12TVP,239,active,easternIdaho_32612,32612,flc_ss_5,ID
+Foster Land and Cattle,South Slope,10,29.48431083,12TVP,240,active,easternIdaho_32612,32612,flc_ss_10,ID
+Foster Land and Cattle,South Slope,9,109.6500833,12TVP,241,active,easternIdaho_32612,32612,flc_ss_9,ID
+Foster Land and Cattle,South Slope,20,45.60389134,12TVP,242,active,easternIdaho_32612,32612,flc_ss_20,ID
+Foster Land and Cattle,South Slope,21,84.90451186,12TVP,235,active,easternIdaho_32612,32612,flc_ss_21,ID
+Foster Land and Cattle,South Slope,7,55.08022786,12TVP,236,active,easternIdaho_32612,32612,flc_ss_7,ID
+Foster Land and Cattle,South Slope,6,130.4352496,12TVP,237,active,easternIdaho_32612,32612,flc_ss_6,ID
+Foster Land and Cattle,South Slope,5A,47.52478332,12TVP,238,active,easternIdaho_32612,32612,flc_ss_5a,ID
+Foster Land and Cattle,South Slope,13A,35.41870388,12TVP,231,active,easternIdaho_32612,32612,flc_ss_13a,ID
+Foster Land and Cattle,South Slope,13,199.4221124,12TVP,232,active,easternIdaho_32612,32612,flc_ss_13,ID
+Foster Land and Cattle,South Slope,12,44.05081793,12TVP,233,active,easternIdaho_32612,32612,flc_ss_12,ID
+Foster Land and Cattle,South Slope,14,100.2340589,12TVP,234,active,easternIdaho_32612,32612,flc_ss_14,ID
+David and Stan Schwendiman,Jensen Farm,1 and 2,230.1907131,12TVP,227,active,easternIdaho_32612,32612,ds_jen_1_2,ID
+Russel Schwendiman Farms,Home Place,51,93.58390629,12TVP,228,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Home Place,91,165.2213818,12TVP,229,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Home Place,11W,27.65842199,12TVP,230,active,easternIdaho_32612,32612,,ID
+David and Stan Schwendiman,Jensen Farm,6,19.16171519,12TVP,223,active,easternIdaho_32612,32612,,ID
+David and Stan Schwendiman,Jensen Farm,5,40.97108482,12TVP,224,active,easternIdaho_32612,32612,ds_jen_5,ID
+David and Stan Schwendiman,Jensen Farm,4,180.1406295,12TVP,225,active,easternIdaho_32612,32612,,ID
+David and Stan Schwendiman,Jensen Farm,3,34.81055091,12TVP,226,active,easternIdaho_32612,32612,,ID
+David and Stan Schwendiman,Jensen Farm,12,55.40250836,12TVP,219,active,easternIdaho_32612,32612,,ID
+David and Stan Schwendiman,Jensen Farm,10,80.51028918,12TVP,220,active,easternIdaho_32612,32612,,ID
+David and Stan Schwendiman,Jensen Farm,9,159.7030964,12TVP,221,active,easternIdaho_32612,32612,ds_jen_9,ID
+David and Stan Schwendiman,Jensen Farm,7,50.48831836,12TVP,222,active,easternIdaho_32612,32612,,ID
+Schwendiman Farms Inc,Blanchard Place,12E,137.8740691,12TVP,215,active,easternIdaho_32612,32612,,ID
+David and Stan Schwendiman,Jensen Farm,14,107.9067527,12TVP,216,active,easternIdaho_32612,32612,,ID
+David and Stan Schwendiman,Jensen Farm,13,162.5120695,12TVP,217,active,easternIdaho_32612,32612,ds_jen_13,ID
+Schwendiman Farms Inc,Home Place,9,131.7752121,12TVP,211,active,easternIdaho_32612,32612,,ID
+Schwendiman Farms Inc,Blanchard Place,10,87.27897469,12TVP,212,active,easternIdaho_32612,32612,,ID
+Schwendiman Farms Inc,Blanchard Place,11,32.02930989,12TVP,213,active,easternIdaho_32612,32612,,ID
+Schwendiman Farms Inc,Blanchard Place,12W,143.9800836,12TVP,214,active,easternIdaho_32612,32612,,ID
+Schwendiman Farms Inc,Home Place,1 West,145.0579622,12TVP,581,active,easternIdaho_32612,32612,,ID
+Schwendiman Farms Inc,Home Place,7,46.65728939,12TVP,208,active,easternIdaho_32612,32612,,ID
+Schwendiman Farms Inc,Home Place,6,34.79890697,12TVP,209,active,easternIdaho_32612,32612,,ID
+Schwendiman Farms Inc,Home Place,8,304.6597652,12TVP,210,active,easternIdaho_32612,32612,,ID
+Schwendiman Farms Inc,Home Place,4,27.86210369,12TVP,203,active,easternIdaho_32612,32612,,ID
+Schwendiman Farms Inc,Home Place,5,73.76623894,12TVP,204,active,easternIdaho_32612,32612,,ID
+Schwendiman Farms Inc,Home Place,3,299.0008862,12TVP,205,active,easternIdaho_32612,32612,,ID
+Schwendiman Farms Inc,Home Place,2,80.15307176,12TVP,206,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Jefferson,Gunderson Small,35.64011041,12TUP,199,active,,32612,,ID
+Keith Wilcox,Jefferson,Woodard,153.2573873,12TUP,200,active,,32612,,ID
+Keith Wilcox,Jefferson,Hunter,117.5835635,12TUP,201,active,,32612,,ID
+Keith Wilcox,Jefferson,Yearsley,189.9586757,12TUP,202,active,,32612,,ID
+Val Schwendiman Farms,Val Upper Farm,East of Dugway,462.9927708,12TVP,323,active,easternIdaho_32612,32612,vshw_upper_eastDugway,ID
+TWR,,Home Place,80.71976901,12TVP,324,active,easternIdaho_32612,32612,,ID
+Val Schwendiman Farms,Val Upper Farm,The 409,345.0540232,12TVP,325,active,easternIdaho_32612,32612,,ID
+Val Schwendiman Farms,Val Lower Farm,Howard Circle,152.3661174,12TVP,326,active,easternIdaho_32612,32612,vshw_lower_howard,ID
+Val Schwendiman Farms,Val Lower Farm,South Along Borrowman Road,162.0530598,12TVP,319,active,easternIdaho_32612,32612,,ID
+Val Schwendiman Farms,Val Lower Farm,East of Lower Cellars,153.3158073,12TVP,320,active,easternIdaho_32612,32612,,ID
+Val Schwendiman Farms,Val Upper Farm,Dave's House,268.4214081,12TVP,321,active,easternIdaho_32612,32612,vshw_upper_eastDaves,ID
+Val Schwendiman Farms,Val Upper Farm,North and East of Detroit Booster,396.8856215,12TVP,322,active,easternIdaho_32612,32612,,ID
+David Schwendiman Farms,West of Hwy,David's 207,192.4671993,12TVP,315,active,easternIdaho_32612,32612,dshw_west_207,ID
+Val Schwendiman Farms,Val Lower Farm,Earl Schwendiman,388.9113167,12TVP,316,active,easternIdaho_32612,32612,vshw_lower_earl,ID
+Val Schwendiman Farms,Val Lower Farm,East of #1 Well,156.8292131,12TVP,317,active,easternIdaho_32612,32612,,ID
+David Schwendiman Farms,Dry Farm,East of 10 Cellar,74.96384207,12TVP,318,active,easternIdaho_32612,32612,,ID
+David Schwendiman Farms,Nedrow,Dave's 200,192.991484,12TVP,312,active,easternIdaho_32612,32612,dshw_ned_200,ID
+David Schwendiman Farms,Nedrow,Dave's 355,359.4485191,12TVP,313,active,easternIdaho_32612,32612,dshw_ned_355,ID
+David Schwendiman Farms,Upper Farm,Dave's 95,105.1928912,12TVP,314,active,easternIdaho_32612,32612,dshw_upper_95,ID
+Val Schwendiman Farms,Val Upper Farm,Chantril 54,55.98605514,12TVP,309,active,easternIdaho_32612,32612,,ID
+Bart Webster,,9 West,74.28478296,12TVP,303,active,easternIdaho_32612,32612,,ID
+Val Schwendiman Farms,Val Lower Farm,96 South of House,94.56298687,12TVP,304,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,Brown 11,32.82217203,12TVP,305,active,easternIdaho_32612,32612,,ID
+Bart Webster,,5.5,70.15265354,12TVP,299,active,easternIdaho_32612,32612,,ID
+Bart Webster,,7,149.5930583,12TVP,300,active,easternIdaho_32612,32612,,ID
+Bart Webster,,8,127.2727026,12TVP,301,active,easternIdaho_32612,32612,,ID
+Bart Webster,,9 East,75.68975774,12TVP,302,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,North Slope,2 South,139.804184,12TVP,295,active,easternIdaho_32612,32612,flc_ns_2_south,ID
+Bart Webster,,3,140.3478771,12TVP,296,active,easternIdaho_32612,32612,,ID
+Bart Webster,,4,140.2910912,12TVP,297,active,easternIdaho_32612,32612,,ID
+Bart Webster,,5,137.8824509,12TVP,298,active,easternIdaho_32612,32612,,ID
+David and Stan Schwendiman,Jensen Farm,15,53.26445995,12TVP,291,active,easternIdaho_32612,32612,,ID
+David and Stan Schwendiman,Jensen Farm,16,4.554340146,12TVP,292,active,easternIdaho_32612,32612,,ID
+David and Stan Schwendiman,Jensen Farm,17,71.43169433,12TVP,293,active,easternIdaho_32612,32612,,ID
+David and Stan Schwendiman,Jensen Farm,18,75.68810635,12TVP,294,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,Brown 10,31.26865271,12TVP,287,active,easternIdaho_32612,32612,,ID
+Bart Webster,,10,104.4210962,12TVP,288,active,easternIdaho_32612,32612,,ID
+Bart Webster,,1,126.270008,12TVP,289,active,easternIdaho_32612,32612,,ID
+Bart Webster,,11,95.60234204,12TVP,290,active,easternIdaho_32612,32612,,ID
+Erickson,Valley,Kates,106.948817,12TVP,283,active,easternIdaho_32612,32612,erk_vg_kates,ID
+Erickson,Valley,Momberger,43.75693321,12TVP,284,active,easternIdaho_32612,32612,erk_vg_momberger,ID
+Erickson,Valley,Ricks Circle,150.15755,12TVP,285,active,easternIdaho_32612,32612,erk_vg_ricks,ID
+Foster Land and Cattle,South Slope,11,50.50991714,12TVP,286,active,easternIdaho_32612,32612,flc_ss_11,ID
+Erickson,Valley,Guys East,11.79476561,12TVP,279,active,easternIdaho_32612,32612,erk_vg_guyseast,ID
+Erickson,Phillips,Point Wipers,112.0990457,12TVP,280,active,easternIdaho_32612,32612,erk_ph_pwipers,ID
+Erickson,Phillips,Point Pivot,150.7439144,12TVP,281,active,easternIdaho_32612,32612,erk_phillips_point,ID
+Erickson,Valley,Edge of Hill,31.83320549,12TVP,282,active,easternIdaho_32612,32612,erk_vg_edge,ID
+Foster Land and Cattle,Valley,Nields,173.6280848,12TVP,275,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,Valley,Weekes Pivot,68.90280935,12TVP,276,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,Valley,Vickrey,73.43567632,12TVP,277,active,easternIdaho_32612,32612,,ID
+Erickson,Valley,Guys West,16.95571565,12TVP,278,active,easternIdaho_32612,32612,erk_vg_guyswest,ID
+Foster Land and Cattle,Valley,Grovers,128.4510194,12TVP,271,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,Valley,Ker,163.440235,12TVP,272,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,Valley,Burts,36.35180029,12TVP,273,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,Valley,Jimmys,135.1994481,12TVP,274,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,Valley,Island,102.4214667,12TVP,267,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,Valley,Daves,37.46334344,12TVP,268,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,Valley,Sholes,98.01547367,12TVP,269,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,Valley,4100,70.33575263,12TVP,270,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,Valley,Bonnies,39.23985441,12TVP,263,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,Valley,Hobbs,93.67042455,12TVP,264,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,Valley,Verns,66.17280436,12TVP,265,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,Valley,Marilyns,112.6533345,12TVP,266,active,easternIdaho_32612,32612,,ID
+David Schwendiman Farms,West of Hwy,Dry Farm South of 207,24.43564279,12TVP,367,active,easternIdaho_32612,32612,,ID
+Val Schwendiman Farms,Val Lower Farm,South of Stans Trailer,155.43603,12TVP,368,active,easternIdaho_32612,32612,,ID
+David Schwendiman Farms,Parkinson,South Pivots,294.5776233,12TVP,369,active,easternIdaho_32612,32612,dshw_park_southPivots,ID
+Val Schwendiman Farms,Val Upper Farm,Smith 322,321.2211599,12TVP,364,active,easternIdaho_32612,32612,vshw_upper_smith322,ID
+Val Schwendiman Farms,Val Lower Farm,South End 211,120.4856651,12TVP,365,active,easternIdaho_32612,32612,vshw_lower_south211,ID
+Stan Schwendiman Farms,Roberts,South Mini,37.94319497,12TVP,366,active,easternIdaho_32612,32612,sshw_roberts_southMini,ID
+Stan Schwendiman Farms,Ricks,S4,108.8213078,12TVP,359,active,easternIdaho_32612,32612,,ID
+Stan Schwendiman Farms,Roberts,Roberts 2,146.675857,12TVP,351,active,easternIdaho_32612,32612,sshw_roberts_2,ID
+Stan Schwendiman Farms,Roberts,Roberts 3 South,72.87652807,12TVP,352,active,easternIdaho_32612,32612,sshw_roberts_3south,ID
+Stan Schwendiman Farms,Roberts,Roberts 4,120.1445462,12TVP,353,active,easternIdaho_32612,32612,sshw_roberts_4,ID
+Val Schwendiman Farms,Val Lower Farm,Russells,77.97000893,12TVP,354,active,easternIdaho_32612,32612,,ID
+David Schwendiman Farms,Dry Farm,Martineau Dry Farm,319.8306938,12TVP,347,active,easternIdaho_32612,32612,,ID
+Stan Schwendiman Farms,Roberts,Roberts 1,154.9996614,12TVP,350,active,easternIdaho_32612,32612,,ID
+Val Schwendiman Farms,Val Lower Farm,State Land Pivot,157.7132655,12TVP,343,active,easternIdaho_32612,32612,vshw_lower_state,ID
+Val Schwendiman Farms,Val Upper Farm,Val's Boot,17.88852348,12TVP,344,active,easternIdaho_32612,32612,vshw_upper_boot,ID
+Foster Land and Cattle,Valley,Weekes Flood East,35.56360773,12TVP,345,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,Valley,Weekes Flood West,26.58599287,12TVP,346,active,easternIdaho_32612,32612,,ID
+David Schwendiman Farms,Val Woods,South Woods Cross East,156.5581063,12TVP,341,active,easternIdaho_32612,32612,,ID
+David Schwendiman Farms,Val Woods,South Woods Cross West,156.3970579,12TVP,342,active,easternIdaho_32612,32612,,ID
+David Schwendiman Farms,Parkinson,NW Parkinsons,155.2257342,12TVP,335,active,easternIdaho_32612,32612,dshw_park_nwParkinson,ID
+Val Schwendiman Farms,Val Upper Farm,NE of 4 Corners,387.9171914,12TVP,336,active,easternIdaho_32612,32612,vshw_upper_parkNE,ID
+Foster Land and Cattle,Valley,Pivot North,18.93432893,12TVP,337,active,easternIdaho_32612,32612,,ID
+David Schwendiman Farms,Dry Farm,Dave's Old Steep Handlines,101.5702847,12TVP,338,active,easternIdaho_32612,32612,,ID
+Val Schwendiman Farms,Val Lower Farm,North End 211,85.56508102,12TVP,331,active,easternIdaho_32612,32612,,ID
+Stan Schwendiman Farms,Roberts,North Mini,34.33042831,12TVP,332,active,easternIdaho_32612,32612,sshw_roberts_northMini,ID
+David Schwendiman Farms,Val Woods,NE Cross,154.5739973,12TVP,333,active,easternIdaho_32612,32612,dshw_woods_northEast,ID
+David Schwendiman Farms,Val Woods,North Woods Cross West,158.0139587,12TVP,334,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,River Side,Lee's,19.56201057,12TVP,327,active,easternIdaho_32612,32612,,ID
+David Schwendiman Farms,Parkinson,NE Parkinson,154.3783957,12TVP,329,active,easternIdaho_32612,32612,dshw_park_neParkinson,ID
+Stan Schwendiman Farms,Neeley,Neeley Dry Farm,822.9832446,12TVP,311,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Thunderridge,Corner Piece,77.16468361,12TVP,370,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Thunderridge,The 40,38.32602982,12TVP,183,active,easternIdaho_32612,32612,,ID
+David Schwendiman Farms,West of Hwy,Creek Divides,193.19486,12TVP,310,active,easternIdaho_32612,32612,dshw_upper_creek,ID
+David Schwendiman Farms,West of Hwy,Road Divides,29.69644995,12TVP,340,active,easternIdaho_32612,32612,dschw_west_roadDivides,ID
+David Schwendiman Farms,West of Hwy,West of David's Pond,370.1849057,12TVP,348,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,Brown East Wiper,11.32874267,12TVP,372,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,61 & 62,209.6165646,12TVP,373,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,Brown 12_13 & 14,162.4719748,12TVP,374,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,Brown 1 & 2,128.5285871,12TVP,375,active,easternIdaho_32612,32612,,ID
+Erickson,Valley,Shop Mini,30.90312764,12TVP,376,active,easternIdaho_32612,32612,erk_vg_shopmini,ID
+Erickson,Valley,Shop Wiper,68.98503937,12TVP,377,active,easternIdaho_32612,32612,erk_vg_shopwiper,ID
+Stan Schwendiman Farms,Roberts,Roberts 3 North,72.08407135,12TVP,378,active,easternIdaho_32612,32612,,ID
+David Schwendiman Farms,Nedrow,Sensebach West,99.24632956,12TVP,381,active,easternIdaho_32612,32612,dshw_ned_senwest,ID
+David Schwendiman Farms,Nedrow,Sensebach East,128.6905169,12TVP,382,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,South Slope,17,62.42924717,12TVP,386,active,easternIdaho_32612,32612,flc_ss_17,ID
+Foster Land and Cattle,South Slope,19,91.24641686,12TVP,388,active,easternIdaho_32612,32612,flc_ss_19,ID
+Foster Land and Cattle,South Slope,18,78.14917224,12TVP,389,active,easternIdaho_32612,32612,flc_ss_18,ID
+John Sharp,Harris,4,146.3762464,12TVP,391,active,easternIdaho_32612,32612,,ID
+John Sharp,Harris,3,140.1186278,12TVP,392,active,easternIdaho_32612,32612,,ID
+John Sharp,Home,2,143.2731915,12TVP,393,active,easternIdaho_32612,32612,,ID
+John Sharp,Home,1,60.0376293,12TVP,394,active,easternIdaho_32612,32612,,ID
+David Schwendiman Farms,Upper Farm,Dave's 440,414.1732564,12TVP,395,active,easternIdaho_32612,32612,dshw_upper_440,ID
+Parkinson Seed Farm,Ashton,22,59.07859518,12TVP,400,active,easternIdaho_32612,32612,,ID
+Parkinson Seed Farm,Ashton,21,129.1613702,12TVP,399,active,easternIdaho_32612,32612,,ID
+Parkinson Seed Farm,Ashton,20,275.6018414,12TVP,398,active,easternIdaho_32612,32612,,ID
+Parkinson Seed Farm,Ashton,18,136.4807537,12TVP,397,active,easternIdaho_32612,32612,,ID
+Parkinson Seed Farm,Ashton,19,118.5844623,12TVP,401,active,easternIdaho_32612,32612,,ID
+Parkinson Seed Farm,Ashton,17,129.6880322,12TVP,402,active,easternIdaho_32612,32612,,ID
+Parkinson Seed Farm,Ashton,14,65.0988525,12TVP,403,active,easternIdaho_32612,32612,,ID
+Parkinson Seed Farm,Ashton,16,199.3286335,12TVP,404,active,easternIdaho_32612,32612,,ID
+Parkinson Seed Farm,Ashton,15,108.9414729,12TVP,405,active,easternIdaho_32612,32612,,ID
+Parkinson Seed Farm,Ashton,13,111.025125,12TVP,406,active,easternIdaho_32612,32612,,ID
+Parkinson Seed Farm,Ashton,8,115.4594996,12TVP,407,active,easternIdaho_32612,32612,,ID
+Parkinson Seed Farm,Ashton,12,165.1396601,12TVP,408,active,easternIdaho_32612,32612,,ID
+Parkinson Seed Farm,Ashton,7,185.6474188,12TVP,409,active,easternIdaho_32612,32612,,ID
+Parkinson Seed Farm,Ashton,6,153.4165775,12TVP,410,active,easternIdaho_32612,32612,,ID
+Parkinson Seed Farm,Ashton,5,170.0388678,12TVP,411,active,easternIdaho_32612,32612,,ID
+Parkinson Seed Farm,Ashton,4,148.3150273,12TVP,412,active,easternIdaho_32612,32612,,ID
+Parkinson Seed Farm,Ashton,11,94.18637319,12TVP,413,active,easternIdaho_32612,32612,,ID
+Parkinson Seed Farm,Ashton,10,35.96375219,12TVP,414,active,easternIdaho_32612,32612,,ID
+Parkinson Seed Farm,Ashton,9,104.7364299,12TVP,415,active,easternIdaho_32612,32612,,ID
+Parkinson Seed Farm,Ashton,3,174.9954612,12TVP,416,active,easternIdaho_32612,32612,,ID
+Parkinson Seed Farm,Ashton,2,257.3868319,12TVP,417,active,easternIdaho_32612,32612,,ID
+Parkinson Seed Farm,Ashton,1,263.6478856,12TVP,396,active,easternIdaho_32612,32612,,ID
+Arcadia Ag,Lundwall,Lundwall Southwest,97.7590743,12TUR,418,active,,32612,,
+Arcadia Ag,Lundwall,Lundall Northeast,103.2929336,12TUR,419,active,,32612,,
+Arcadia Ag,Lundwall,Lundwall South,121.7428752,12TUR,420,active,,32612,,
+Arcadia Ag,Lundwall,Lundwall East Corners,10.80004458,12TUR,421,active,,32612,,
+Arcadia Ag,Mangels,1 Southwest,12.10342052,12TUR,566,active,,32612,,
+Arcadia Ag,Mangels,5 North,6.035453159,12TUR,544,active,,32612,,
+Arcadia Ag,Mangels,5 South,5.166110824,12TUR,543,active,,32612,,
+Arcadia Ag,Mangels,4,43.51116288,12TUR,427,active,,32612,,
+Arcadia Ag,Mangels,2,199.5807295,12TUR,428,active,,32612,,
+Arcadia Ag,Banks,Banks Pivot,154.3142021,12TUR,431,active,,32612,,
+Arcadia Ag,Red Field,Red Field Pivot Southeast,112.3474578,12TUR,436,active,,32612,,
+Arcadia Ag,Red Field,Red Field North Wiper,238.610417,12TUR,437,active,,32612,,
+Arcadia Ag,Red Field,Red Field North Handlines,23.04590471,12TUR,438,active,,32612,,
+Arcadia Ag,Ladder Canyon,Ladder Canyon North,96.40315127,12TUR,439,active,,32612,,
+Arcadia Ag,Ladder Canyon,Ladder Canyon Handlines,30.72793299,12TUR,440,active,,32612,,
+Arcadia Ag,Ladder Canyon,Ladder Canyon South,89.42988754,12TUR,441,active,,32612,,
+Arcadia Ag,Banks,Banks Wiper,79.02217214,12TUR,442,active,,32612,,
+Arcadia Ag,Martin Farm,Nye Pivot,81.1738702,12TUR,443,active,,32612,,
+Arcadia Ag,Martin Farm,Little Buyan,65.88882118,12TUR,444,active,,32612,,
+Arcadia Ag,Martin Farm,Big Buyan,234.5058348,12TUR,445,active,,32612,,
+Arcadia Ag,Martin Farm,Bobs 1 West,71.95211786,12TUR,446,active,,32612,,
+Arcadia Ag,Martin Farm,Bobs 3,152.2755599,12TUR,447,active,,32612,,
+Arcadia Ag,Martin Farm,Bobs 2,91.9043956,12TUR,448,active,,32612,,
+Arcadia Ag,Martin Farm,Bobs 4,172.9168969,12TUR,449,active,,32612,,
+Arcadia Ag,Martin Farm,State Pivot,188.1287644,12TUR,452,active,,32612,,
+David Schwendiman Farms,Neeley,Neeley Dry Farm,718.8121132,12TVP,330,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,Valley,State Ground,54.01258523,12TVP,339,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,Valley,Mullberries,31.15843463,12TVP,349,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Jensen Dry Farm,Jensen South,2253.628494,12TVP,455,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Jensen Dry Farm,Jensen West,123.2168544,12TVP,456,active,easternIdaho_32612,32612,,ID
+Russel Schwendiman Farms,Jensen Dry Farm,Jensen North,727.1114388,12TVP,457,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,Southwest of 6,5.786552672,12TVP,458,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,North of 6 and 7,4.224069541,12TVP,459,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,2 Hump Dry Farm,100.8722424,12TVP,460,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,South End of 3 and 5,33.99258131,12TVP,461,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,Brown East Dry Farm,149.0332742,12TVP,462,active,easternIdaho_32612,32612,,ID
+Erickson,Herbert,5,75.09485708,12TVP,463,active,easternIdaho_32612,32612,erk_herb_5,ID
+Keith Wilcox,Madison,60a,4.115273256,12TVP,464,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,60,9.488130503,12TVP,465,active,easternIdaho_32612,32612,,ID
+Erickson,Valley,Minis North,37.44748189,12TVP,466,active,easternIdaho_32612,32612,erk_vg_upminisnrth,ID
+Erickson,Valley,Minis South,38.62689314,12TVP,467,active,easternIdaho_32612,32612,erk_vg_upminissouth,ID
+Erickson,Valley,12,154.2719601,12TVP,470,active,easternIdaho_32612,32612,erk_vg_12,ID
+Erickson,Valley,Phillips 38,29.56259397,12TVP,471,active,easternIdaho_32612,32612,erk_vg_phillips38,ID
+Arcadia Ag,Home Place,Schuit,245.0088845,12TUR,472,active,,32612,,
+Arcadia Ag,Martin Farm,Nyle Pivot,73.09764968,12TUR,473,active,,32612,,
+David and Stan Schwendiman,Jensen Farm,Corner of pivot 5,2.276007012,12TVP,487,active,easternIdaho_32612,32612,,ID
+David and Stan Schwendiman,Jensen Farm,8,48.35354163,12TVP,486,active,easternIdaho_32612,32612,,ID
+David and Stan Schwendiman,Jensen Farm,11 with corners,128.1671207,12TVP,489,active,easternIdaho_32612,32612,,ID
+Stan Schwendiman Farms,Ricks,S7 & S8 barley,317.0729154,12TVP,482,active,easternIdaho_32612,32612,,ID
+Stan Schwendiman Farms,Ricks,S9 & S10 potatoes,307.7302812,12TVP,483,active,easternIdaho_32612,32612,,ID
+Stan Schwendiman Farms,Ricks,S5 & S6 barley,270.0025493,12TVP,474,active,easternIdaho_32612,32612,sshw_ricks_s5s6,ID
+Keith Wilcox,Madison,Daw 2,63.12113533,12TVP,476,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,Daw 5,23.56053836,12TVP,478,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,Daw 4,51.62243865,12TVP,518,active,easternIdaho_32612,32612,,ID
+Crapo Farms,Lenz,Lenz 5,174.4891418,12TVP,515,active,easternIdaho_32612,32612,,ID
+Crapo Farms,Lenz,Dennis Mini,37.84045869,12TVP,517,active,easternIdaho_32612,32612,,ID
+Stan Schwendiman Farms,Ricks,S1 with corners,112.9074922,12TVP,520,active,easternIdaho_32612,32612,sshw_ricks_s1,ID
+Stan Schwendiman Farms,Ricks,S2 & S3,152.1444845,12TVP,513,active,easternIdaho_32612,32612,sshw_ricks_s2s3,ID
+Foster Land and Cattle,Valley,Don Brown,133.3096489,12TVP,512,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,Valley,Brand Anderson,22.4027059,12TVP,516,active,easternIdaho_32612,32612,,ID
+Arcadia Ag,Martin Farm,Broxels,125.6523222,12TUR,514,active,,32612,,
+Stan Schwendiman Farms,Roberts,Dry Farm North of Roberts 3,11.01566784,12TVP,328,active,easternIdaho_32612,32612,,ID
+Erickson,Valley,11,167.5114627,12TVP,469,active,easternIdaho_32612,32612,erk_vg_11,ID
+Keith Wilcox,Madison,Brown 3 NE Corner,5.472108236,12TVP,505,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,5 West Handlines,4.349364078,12TVP,504,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,Brown 4 NE Corner,7.302257406,12TVP,509,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,Brown 10 N Corner,6.030435032,12TVP,508,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,66 SW Corner,1.828182805,12TVP,507,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,68 West,2.93026804,12TVP,502,active,easternIdaho_32612,32612,,ID
+Schwendiman Farms Inc,Home Place,Dry Farm North of Road,13.95191078,12TVP,506,active,easternIdaho_32612,32612,,ID
+Val Schwendiman Farms,Val Upper Farm,Far East Wiper,51.3291466,12TVP,503,active,easternIdaho_32612,32612,vshw_upper_farEastWiper,ID
+Stan Schwendiman Farms,Ricks,S4 NW Corner,3.836885999,12TVP,498,active,easternIdaho_32612,32612,,ID
+Erickson,Valley,TWR Pivot,146.1079558,12TVP,468,active,easternIdaho_32612,32612,erk_vg_twr,ID
+Keith Wilcox,Madison,North 55 Corners,12.81144801,12TVP,501,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,51 Corners,9.029720394,12TVP,500,active,easternIdaho_32612,32612,,ID
+Schwendiman Farms Inc,Home Place,1 Corners,42.43554994,12TVP,497,active,easternIdaho_32612,32612,,ID
+Schwendiman Farms Inc,Home Place,2 Corners,5.934047986,12TVP,496,active,easternIdaho_32612,32612,,ID
+Schwendiman Farms Inc,Home Place,3 Corners,35.25329035,12TVP,499,active,easternIdaho_32612,32612,,ID
+Schwendiman Farms Inc,Home Place,5 Corners,13.04428517,12TVP,490,active,easternIdaho_32612,32612,,ID
+Schwendiman Farms Inc,Home Place,7 Corners,6.269360425,12TVP,493,active,easternIdaho_32612,32612,,ID
+Schwendiman Farms Inc,Home Place,8 East Side,36.15555173,12TVP,492,active,easternIdaho_32612,32612,,ID
+Schwendiman Farms Inc,Home Place,9 Corners,14.62886898,12TVP,495,active,easternIdaho_32612,32612,,ID
+Schwendiman Farms Inc,Home Place,6 Corner,3.054173367,12TVP,519,active,easternIdaho_32612,32612,,ID
+Schwendiman Farms Inc,Home Place,4 Corners,1.897395573,12TVP,521,active,easternIdaho_32612,32612,,ID
+Foster Land and Cattle,North Slope,3 North,143.1822108,12TVP,160,active,easternIdaho_32612,32612,flc_ns_3north,ID
+Keith Wilcox,Madison,Ball 1,111.4152631,12TVP,527,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,Ball 2,115.1688471,12TVP,528,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,Ball 3,116.4313209,12TVP,547,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,Ball 4,116.5806973,12TVP,529,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,Ball 5,133.4577323,12TVP,530,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,Ball 6,127.727104,12TVP,531,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,Daw Highway,60.79660131,12TVP,532,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,Daw 3,107.506293,12TVP,533,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,Daw 1a,17.0725375,12TVP,534,active,easternIdaho_32612,32612,,ID
+Keith Wilcox,Madison,Daw 1,124.4623911,12TVP,535,active,easternIdaho_32612,32612,,ID
+Arcadia Ag,Lundwall,Debbies,13.32942724,12TUR,536,active,,32612,,
+Arcadia Ag,Lundwall,Donnies 2020,164.1212556,12TUR,537,active,,32612,,
+Arcadia Ag,Lundwall,Christensens,138.6980555,12TUR,538,active,,32612,,
+Arcadia Ag,Ladder Canyon,Christiansens by Ladder,171.7390334,12TUR,539,active,,32612,,
+Arcadia Ag,Lundwall,Malestich,127.3994517,12TUR,540,active,,32612,,
+Arcadia Ag,Mangels,Schuitt,71.2776263,12TUR,541,active,,32612,,
+Arcadia Ag,Mangels,McCoy Pivot,250.7223179,12TUR,542,active,,32612,,
+Arcadia Ag,Mangels,6,134.8876964,12TUR,424,active,,32612,,
+Arcadia Ag,Mangels,3,138.8939382,12TUR,423,active,,32612,,
+Val Schwendiman Farms,Val Upper Farm,Klinger Dry Farm,767.6035292,12TVP,550,active,easternIdaho_32612,32612,,ID
+Erickson,Valley,20,12.11261961,12TVP,549,active,easternIdaho_32612,32612,erk_vg_20,ID
+Val Schwendiman Farms,Val Upper Farm,409 Corners,67.90271193,12TVP,551,active,easternIdaho_32612,32612,vshw_upper_409corners,ID
+David Schwendiman Farms,Nedrow,Sensebach East Corners,29.6178438,12TVP,559,active,easternIdaho_32612,32612,,ID
+Arcadia Ag,Mangels,1 Southeast,20.59241762,12TUR,565,active,,32612,,
+Arcadia Ag,Mangels,1 Northeast,22.04394864,12TUR,422,active,,32612,,
+Arcadia Ag,Mangels,1 Northwest,16.98670743,12TUR,564,active,,32612,,
+Arcadia Ag,Martin Farm,Bobs 1 East,74.67095058,12TUR,567,active,,32612,,
+Foster Land and Cattle,North Slope,14,133.9332936,12TVP,12,active,easternIdaho_32612,32612,flc_ns_14,ID
+Schwendiman Farms Inc,Home Place,1 East,144.9901133,12TVP,207,active,easternIdaho_32612,32612,,ID
+Parkinson Foundation Seed,Ellis,Pivot 7,64.84056856,11TQK,582,active,salmon_32611,32611,pfs_ellis_7,ID
+Parkinson Foundation Seed,Ellis,Pivot 1,39.39414561,11TQK,583,active,salmon_32611,32611,,ID
+Parkinson Foundation Seed,Sulfer Creek,Pivot 17,136.4567603,11TQK,584,active,salmon_32611,32611,,ID
+Parkinson Foundation Seed,Sulfer Creek,Pivot 20,179.4923821,11TQK,585,active,salmon_32611,32611,pfs_sulfer_20,ID
+John Sharp,Dr Lee's,Lee's,39.09495,12TVP,586,active,easternIdaho_32612,32612,,ID
+Bob Mortenson,Home,House,119.324823,12TVP,587,active,easternIdaho_32612,32612,,ID
+Schwendiman Farms,Menan,M-80,67.08463541,12TVP,588,active,easternIdaho_32612,32612,,ID
+Dobson Ranches,Home Place,Primitive,97.18858921,,606,active,,,,ID
+Dobson Ranches,Home Place,Southeast 320,281.1792449,,589,active,,,,ID
+Dobson Ranches,Home Place,Northeast 320,298.434724,,590,active,,,,ID
+Dogson Ranches,Home Place,Valley Pivots North of Hay Shed,183.2011094,,591,active,,,,ID
+Dobson Ranches,Home Place,Northwest 320,336.5365973,,592,active,,,,ID
+Dobson Ranches,Home Place,Southwest 320,301.4961665,,593,active,,,,ID
+Dobson Ranches,Home Place,Half Pivot,72.95255948,,594,active,,,,ID
+Dobson Ranches,Home Place,Summers Flood Ground,50.29565072,,595,active,,,,ID
+Dobson Ranches,Home Place,Far South Pivot,125.354594,,596,active,,,,ID
+Grand Teton Organics,Bauer's,Forsyth,53.89758942,,597,active,,,,ID
+Grand Teton Organics,Bauer's,West Wilding,34.56348358,,598,active,,,,ID
+Grand Teton Organics,Bauer's,East Wilding,29.48779395,,599,active,,,,ID
+Western Ag,Bauers,Birch Place,59.89033439,,600,active,,,,ID
+Western Ag,Bauers,Corner Arm Pivot,149.2166702,,601,active,,,,ID
+Western Ag,Bauers,Stacy's Shop,244.1045273,,602,active,,,,ID
+Western Ag,Bauers,Brigg Gardner,55.03335573,,603,active,,,,ID
+Western Ag,Bauers,Eddies,70.61837781,,604,active,,,,ID
+Teton Organics,Bauers,Eddies,36.25222342,,605,active,,,,ID
+Grand Teton Organics,Bauer's,Miss Ski,295.9452538,,607,active,,,,ID
+Western Ag,Bauers,Bores on,69.6897701,,608,active,,,,
+Bart Webster,,6,141.6739089,12TVP,609,active,easternIdaho_32612,32612,,ID
