@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import datetime
+from gsheetsdb import connect
+
+conn=connect()
 
 fields=pd.read_csv('data/fields.csv')
 crops_variety=pd.read_csv('data/crops_variety.csv')
@@ -15,32 +18,31 @@ menu=['Crop Assignment','Inputs Logging']
 choice=st.sidebar.selectbox('Menu',menu)
 
 if choice=='Crop Assignment':
+    st.session_state.counter=0
     now=datetime.datetime.utcnow()
     clients=np.sort(fields['Client'].unique())
     crops=np.sort(crops_variety['crop'].unique())
     
     st.subheader('Crop and Variety Assignment')
-    with st.form(key='form0'):
-        crop=st.selectbox('Crop',crops)
-        client=st.selectbox('Client',clients)
-        year=st.selectbox('Crop Year',years)
-        submit_button=st.form_submit_button()
+    #with st.form(key='form0'):
+    crop=st.selectbox('Crop',crops,0)
+    varieties=np.sort(crops_variety[crops_variety['crop']==crop]['variety'].unique())
+    variety=st.selectbox('Variety',varieties)
     
-    with st.form(key='form1'):
-        varieties=np.sort(crops_variety[crops_variety['crop']==crop]['variety'].unique())
-        farms=np.sort(fields[fields['Client']==client]['Farm'].unique())
+    year=st.selectbox('Crop Year',years)
+    client=st.selectbox('Client',clients)
+    farms=np.sort(fields[fields['Client']==client]['Farm'].unique())
+    farm=st.selectbox('Farm',farms)
+    #submit_button1=st.form_submit_button()
 
-        variety=st.selectbox('Variety',varieties)
-        farm=st.selectbox('Farm',farms)
-        submit_button1=st.form_submit_button()
+#with st.form(key='form2'):
+    fields_sub=fields[fields['Client']==client]
+    fields_sub=fields_sub[fields_sub['Farm']==farm]
+    fields_list=np.sort(fields_sub['Field'].unique())
+    fields_list=st.multiselect('Fields',fields_list)
+    #submit_button2=st.form_submit_button()
     
-    with st.form(key='form2'):
-        fields_sub=fields[fields['Client']==client]
-        fields_sub=fields_sub[fields_sub['Farm']==farm]
-        fields_list=np.sort(fields_sub['Field'].unique())
-        fields_list=st.multiselect('Fields',fields_list)
-        submit_button2=st.form_submit_button()
-        
+    if st.button('SUBMIT'):
         for field in fields_list:
             field_row=fields_sub[fields_sub['Field']==field]
             assert len(field_row)==1, 'There is a duplicate field name for this farm'
@@ -54,18 +56,18 @@ if choice=='Crop Assignment':
             crop_assignments.loc[ca_i,'variety']=variety
             ca_i+=1
         
+        crop_assignments['year']=crop_assignments['year'].astype(int)
+        crop_assignments['unq_fldid']=crop_assignments['unq_fldid'].astype(int)
         crop_assignments.to_csv('data/crop_assignments.csv',index=False)
-            
-            
-            
-        
-    
-    
-        
-        
+        st.write('The crop was assigned to the fields')
+        #st.write(st.session_state.keys())
+        st.write(crop_assignments[['log_datetime','client','farm'
+                                   ,'field','crop','variety']])
+        #st.session_state.counter=0
+        #st.experimental_rerun() 
         
         
-        
+
     
 elif choice=='Inputs Logging':
     st.subheader('Inputs Logging')
