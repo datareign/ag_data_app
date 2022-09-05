@@ -2,3 +2,4 @@
 */.ipynb_checkpoints/*
 */data/.ipynb_checkpoints/*
 */.streamlit/*
+*/secrets.toml
