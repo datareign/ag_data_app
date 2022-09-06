@@ -9,17 +9,15 @@ import json
 fields=pd.read_csv('data/fields.csv')
 crops_variety=pd.read_csv('data/crops_variety.csv')
 inputs=pd.read_csv('data/inputs.csv')
-#crop_assignments=pd.read_csv('data/crop_assignments.csv')
-#ca_i=len(crop_assignments)
 
 key_dict=json.loads(st.secrets['textkey'])
 creds=service_account.Credentials.from_service_account_info(key_dict)
 db=firestore.Client(credentials=creds,project='agdata-f5a79')
 
-doc_ref=db.collection('crop_assignments').document('test0')
-doc=doc_ref.get()
-st.write(doc.id)
-st.write(doc.to_dict())
+#doc_ref=db.collection('crop_assignments').document('test0')
+#doc=doc_ref.get()
+#st.write(doc.id)
+#st.write(doc.to_dict())
 
 
 years=[2022,2023]
@@ -53,10 +51,25 @@ if choice=='Crop Assignment':
     fields_list=st.multiselect('Fields',fields_list)
     #submit_button2=st.form_submit_button()
     
-    #if st.button('SUBMIT'):
-        #for field in fields_list:
-        #    field_row=fields_sub[fields_sub['Field']==field]
-        #    assert len(field_row)==1, 'There is a duplicate field name for this farm'
+    if st.button('SUBMIT'):
+        for field in fields_list:
+            field_row=fields_sub[fields_sub['Field']==field]
+            assert len(field_row)==1, 'There is a duplicate field name for this farm'
+            unq_fldid=field_row.iloc[0]['unq_fldid']
+            acres=field_row.iloc[0]['acres']
+            doc_ref=db.collection('crop_assignments').document(f'{int(unq_fldid)}_{int(year)}')
+            doc_ref.set({'log_datetime':now,
+                         'unq_fldid':int(unq_fldid),
+                         'crop_year':int(year),
+                         'client':client,
+                         'farm':farm,
+                         'field':field,
+                         'acres':float(acres),
+                         'crop':crop,
+                         'variety':variety})
+            
+        #    
+        #    
         #    crop_assignments.loc[ca_i,'log_datetime']=now
         #    crop_assignments.loc[ca_i,'unq_fldid']=field_row.iloc[0]['unq_fldid']
         #    crop_assignments.loc[ca_i,'year']=year
