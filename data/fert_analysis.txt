@@ -1,4 +1,4 @@
-fertProd	form	liqDensity(lbs/gal)	N	P	K	S	Mg	Ca	B	Cl	Mn	Fe	Cu	Zn	Mo
+fert_prod	form	liqDensity(lbs/gal)	N	P	K	S	Mg	Ca	B	Cl	Mn	Fe	Cu	Zn	Mo
 10% Liq. Boron	liquid	11							10						
 10-100-61-266 (Sulfuric)	liquid	10	10	100	61	266									
 10-34-0	liquid	11.65	10	34											
