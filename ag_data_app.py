@@ -81,7 +81,7 @@ if choice=='View Crop Assignments':
         
         csv=df.to_csv().encode('utf-8')
         if st.download_button(label='Download Data',data=csv,
-                              file_name='Crop Assignments.csv',
+                              file_name='Crop_Assignments.csv',
                               mime='text/csv'):
             st.write('Your dataset has downloaded.')
         
@@ -100,7 +100,7 @@ if choice=='View Input Assignments':
         client=st.selectbox('Client',clients)
                 
     df_list=[]
-    crop_refs=db.collection('crop_inputs')
+    crop_refs=db.collection('crop_inputs_prod')
     for doc in crop_refs.stream():
         df_list.append(pd.DataFrame(doc.to_dict(),index=[0]))
         
@@ -122,7 +122,7 @@ if choice=='View Input Assignments':
             st.button('Click to Delete',on_click=tools.clear_text)
         csv=df.to_csv().encode('utf-8')
         if st.download_button(label='Download Data',data=csv,
-                              file_name='Input Assignments.csv',
+                              file_name='Input_Assignments.csv',
                               mime='text/csv'):
             st.write('Your dataset has downloaded.')
     else:
@@ -144,7 +144,7 @@ if choice=='View Applied Nutrients':
         field=st.selectbox('Field',fields_list)
         
     df_list=[]
-    crop_refs=db.collection('crop_inputs')
+    crop_refs=db.collection('crop_inputs_prod')
     for doc in crop_refs.stream():
         df_list.append(pd.DataFrame(doc.to_dict(),index=[0]))
     df=pd.concat(df_list)
@@ -153,7 +153,7 @@ if choice=='View Applied Nutrients':
     df=df[df['farm']==farm]
     df=df[df['field']==field]
     df=df[df['type']=='fertilizer']
-    
+        
     if len(df)>0:    
         nutrient_dfs=[]
         for index,row in df.iterrows():
@@ -172,8 +172,13 @@ if choice=='View Applied Nutrients':
             #nutrient_df.loc[len(nutrient_df)-1,'App Units']=''
         
         st.table(nutrient_df.style.format(NUTRIENT_STYLE))
+        csv=nutrient_df.to_csv().encode('utf-8')
+        if st.download_button(label='Download Data',data=csv,
+                              file_name='Applied_Nutrients.csv',
+                              mime='text/csv'):
+            st.write('Your dataset has downloaded.')     
     else:
-        st.write('There are no fertilizer records for this field')    
+        st.write('There are no fertilizer records for this field')
     
 elif choice=='Assign Crops':
     st.subheader('Assign Crops')
@@ -192,7 +197,6 @@ elif choice=='Assign Crops':
         client=st.selectbox('Client',clients)
         farms=np.sort(fields[fields['Client']==client]['Farm'].unique())
         farm=st.selectbox('Farm',farms)
-
         fields_sub=fields[fields['Client']==client]
         fields_sub=fields_sub[fields_sub['Farm']==farm]
         fields_list=np.sort(fields_sub['Field'].unique())
@@ -255,7 +259,6 @@ elif choice=='Assign Inputs':
         client=st.selectbox('Client',clients)
         farms=np.sort(fields[fields['Client']==client]['Farm'].unique())
         farm=st.selectbox('Farm',farms)
-
         fields_sub=fields[fields['Client']==client]
         fields_sub=fields_sub[fields_sub['Farm']==farm]
         fields_list=np.sort(fields_sub['Field'].unique())
