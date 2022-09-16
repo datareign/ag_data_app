@@ -39,6 +39,25 @@ def set_png_as_page_bg(png_file):
     st.markdown(page_bg_img, unsafe_allow_html=True)
     return
 
+
+@st.experimental_memo
+def get_crop_data(_dbase,collection):
+    df_list=[]
+    crop_refs=_dbase.collection(collection)
+    for doc in crop_refs.stream():
+        df_list.append(pd.DataFrame(doc.to_dict(),index=[0]))
+    df=pd.concat(df_list)
+    return df
+
+@st.experimental_memo
+def get_input_data(_dbase,collection):
+    df_list=[]
+    crop_refs=_dbase.collection(collection)
+    for doc in crop_refs.stream():
+        df_list.append(pd.DataFrame(doc.to_dict(),index=[0]))
+    df=pd.concat(df_list)
+    return df
+
 set_png_as_page_bg('data/background3.jpg')
 
 years=[2022,2023]
@@ -59,20 +78,20 @@ if choice=='View Crop Assignments':
         clients=np.sort(fields['Client'].unique())
     with col1:
         client=st.selectbox('Client',clients)    
+        
+    df=get_crop_data(db,'crop_assignments')
     
-    df_list=[]
-    crop_refs=db.collection('crop_assignments')
-    for doc in crop_refs.stream():
-        df_list.append(pd.DataFrame(doc.to_dict(),index=[0]))
-    df=pd.concat(df_list)
     df=df[df['crop_year']==int(year)]
+    df['crop_year']=df['crop_year'].astype(int)
     df=df[df['client']==client]
+    
     if len(df)>0:
         df.sort_values(by=['field','farm','client'],inplace=True)
         df.reset_index(drop=True,inplace=True)
         df=df[['client','farm','field','crop_year',
                'acres','crop','variety','uuid']]
-        st.table(df.style.format(CROP_STYLE))
+        #st.table(df.style.format(CROP_STYLE))
+        st.dataframe(df.style.format(CROP_STYLE))
         st.write('If you wish to delete a record, copy the UUID and paste into the input cell below.')
         doc_del=st.text_input('Delete Record',key=0)
         if len(doc_del)>0:
@@ -98,22 +117,21 @@ if choice=='View Input Assignments':
         clients=np.sort(fields['Client'].unique())
     with col1:
         client=st.selectbox('Client',clients)
-                
-    df_list=[]
-    crop_refs=db.collection('crop_inputs_prod')
-    for doc in crop_refs.stream():
-        df_list.append(pd.DataFrame(doc.to_dict(),index=[0]))
-        
-    df=pd.concat(df_list)
+    
+    df=get_input_data(db,'crop_inputs_prod')
+    
     df=df[df['crop_year']==int(year)]
+    df['crop_year']=df['crop_year'].astype(int)
     df=df[df['client']==client]
     
     if len(df)>0:
         df.sort_values(by=['field','farm','client'],inplace=True)
         df.reset_index(drop=True,inplace=True)
         df=df[['client','farm','field','crop_year','acres',
-               'product','type','formulation','rate','units','uuid']]
-        st.table(df.style.format(INPUT_STYLE))
+               'product','type','formulation','rate','units',
+               'uuid','notes']]
+        #st.table(df.style.format(INPUT_STYLE))
+        st.dataframe(df.style.format(INPUT_STYLE))
         
         st.write('If you wish to delete a record, copy the UUID and paste into the input cell below.')
         doc_del=st.text_input('Delete Record',key=0)
@@ -142,13 +160,11 @@ if choice=='View Applied Nutrients':
         fields_sub=fields_sub[fields_sub['Farm']==farm]
         fields_list=np.sort(fields_sub['Field'].unique())
         field=st.selectbox('Field',fields_list)
-        
-    df_list=[]
-    crop_refs=db.collection('crop_inputs_prod')
-    for doc in crop_refs.stream():
-        df_list.append(pd.DataFrame(doc.to_dict(),index=[0]))
-    df=pd.concat(df_list)
+
+    df=get_input_data(db,'crop_inputs_prod')
+
     df=df[df['crop_year']==int(year)]
+    df['crop_year']=df['crop_year'].astype(int)
     df=df[df['client']==client]
     df=df[df['farm']==farm]
     df=df[df['field']==field]
@@ -160,8 +176,10 @@ if choice=='View Applied Nutrients':
             nutrient_dfs.append(tools.add_nutrients(fert_analysis,
                                                     row['product'],
                                                     row['rate'],
-                                                    row['units']))
+                                                    row['units'],
+                                                    int(year)))
         nutrient_df=pd.concat(nutrient_dfs)
+        #nutrient_df['Crop Year']=nutrient_df['Crop Year'].astype(int)
         nutrient_df.reset_index(drop=True,inplace=True)
         
         nutrients=['N','P','K','S','Mg','Ca','B','Cl','Mn','Fe','Cu','Zn','Mo']
@@ -171,7 +189,8 @@ if choice=='View Applied Nutrients':
             #nutrient_df.loc[len(nutrient_df)-1,'Rate']=0
             #nutrient_df.loc[len(nutrient_df)-1,'App Units']=''
         
-        st.table(nutrient_df.style.format(NUTRIENT_STYLE))
+        #st.table(nutrient_df.style.format(NUTRIENT_STYLE))
+        st.dataframe(nutrient_df.style.format(NUTRIENT_STYLE))
         csv=nutrient_df.to_csv().encode('utf-8')
         if st.download_button(label='Download Data',data=csv,
                               file_name='Applied_Nutrients.csv',
@@ -201,6 +220,7 @@ elif choice=='Assign Crops':
         fields_sub=fields_sub[fields_sub['Farm']==farm]
         fields_list=np.sort(fields_sub['Field'].unique())
         fields_list=st.multiselect('Fields',fields_list)
+        notes=st.text_area('Notes')
     
         if st.button('SUBMIT'):
             for field in fields_list:
@@ -219,8 +239,11 @@ elif choice=='Assign Crops':
                              'field':field,
                              'acres':float(acres),
                              'crop':crop,
-                             'variety':variety})
+                             'variety':variety,
+                             'notes':notes})
             st.write('You have successfully submitted your data.')
+            #st.experimental_memo.clear()
+            get_crop_data.clear()
             
 elif choice=='Assign Inputs':
     st.subheader('Assign Inputs')
@@ -263,6 +286,7 @@ elif choice=='Assign Inputs':
         fields_sub=fields_sub[fields_sub['Farm']==farm]
         fields_list=np.sort(fields_sub['Field'].unique())
         fields_list=st.multiselect('Fields',fields_list)
+        notes=st.text_area('Notes')
 
         if st.button('SUBMIT'):
             for field in fields_list:
@@ -284,8 +308,10 @@ elif choice=='Assign Inputs':
                              'type':input_type,
                              'formulation':input_form,
                              'rate':float(rate),
-                             'units':units})
+                             'units':units,
+                             'notes':notes})
             st.write('You have successfully submitted your data.')
-    
+            #st.experimental_memo.clear()
+            get_input_data.clear()
     
     

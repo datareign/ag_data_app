@@ -17,13 +17,22 @@ def unmutate_string(s,s_last):
     s_unmutated=s.rstrip(s[-1])
     s_unmutated=s_unmutated+s_last
     return s_unmutated
+
+def get_data(db,collection):
+    df_list=[]
+    crop_refs=db.collection(collection)
+    for doc in crop_refs.stream():
+        df_list.append(pd.DataFrame(doc.to_dict(),index=[0]))
+    df=pd.concat(df_list)
+    return df
     
 
-def add_nutrients(fert_analysis,fert_name,fert_rate,rate_units):
+def add_nutrients(fert_analysis,fert_name,fert_rate,rate_units,crop_year):
     nutrients=['N','P','K','S','Mg','Ca','B','Cl','Mn','Fe','Cu','Zn','Mo']
-    cols=['Product','Rate','App Units','N','P','K','S','Mg',
+    cols=['Product','Rate','App Units','Crop Year','N','P','K','S','Mg',
           'Ca','B','Cl','Mn','Fe','Cu','Zn','Mo']
     df=pd.DataFrame(columns=cols)
+    df.loc[0,'Crop Year']=crop_year
     df.loc[0,'Product']=fert_name
     df.loc[0,'Rate']=fert_rate
     df.loc[0,'App Units']=rate_units

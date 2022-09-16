@@ -1,6 +1,8 @@
-.ipynb_checkpoints
-*/.ipynb_checkpoints/*
-*/data/.ipynb_checkpoints/*
-*/.streamlit/firestore_key.json*
-secrets.toml
-firestore_key.json
+.ipynb_checkpoints/
+.streamlit/
+#*/.ipynb_checkpoints/*
+#*/data/.ipynb_checkpoints/*
+#*/.streamlit/firestore_key.json*
+#secrets.toml
+#firestore_key.json
+
