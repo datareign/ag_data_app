@@ -445,7 +445,8 @@ if authentication_status:
             bucket=gcp_client.bucket(bucket_name)
             file_path=f'zone_pdf_labels/{zone_id}.pdf'
             if bucket.blob(file_path).exists():
-                pdf_file=bucket.blob(file_path).open()
+                #pdf_file=bucket.blob(file_path).open()
+                pdf_file=bucket.blob(file_path).download_as_bytes(raw_download=True)
                 st.download_button(label='Download Sample Labels',
                                    data=pdf_file,
                                    file_name=f'{short_name}_labels.pdf',
@@ -453,7 +454,8 @@ if authentication_status:
             
             file_path=f'zone_pdf_samples/{zone_id}.pdf'
             if bucket.blob(file_path).exists():
-                pdf_file=bucket.blob(file_path).open()
+                #pdf_file=bucket.blob(file_path).open()
+                pdf_file=bucket.blob(file_path).download_as_bytes(raw_download=True)
                 st.download_button(label='Download Soil Data',
                                    data=pdf_file,
                                    file_name=f'{short_name}_soil_data.pdf',
