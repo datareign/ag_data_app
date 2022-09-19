@@ -12,6 +12,7 @@ import base64
 import streamlit_authenticator as stauth
 from google.cloud import storage
 import io
+import plotly.express as px
 
 env='dev'
 
@@ -471,4 +472,17 @@ if authentication_status:
         
         with col1:
             st.image(img_file_url)
+            
         
+        file_path=f'zone_img_tables/{zone_id}.csv'
+        if bucket.blob(file_path).exists():
+            zone_img_data=get_gcp_csv(gcp_client,bucket_name,file_path)
+            zones=list(zone_img_data)
+            zone_img_data['dates']=pd.to_datetime(zone_img_data['dates'])
+            fig=px.line(zone_img_data,x='dates',y=zones,
+                        #color_discrete_sequence=px.colors.sequential.Viridis,
+                        markers=True,
+                        labels={'dates':'Dates','value':'Biomass Index Value',
+                                'variable':'Zone'},
+                        title='Zone Biomass Curves')
+            st.plotly_chart(fig)
