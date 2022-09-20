@@ -14,7 +14,7 @@ from google.cloud import storage
 import io
 import plotly.express as px
 
-env='dev'
+env='prod'
 
 #fields=pd.read_csv('data/fields.csv')
 #crops_variety=pd.read_csv('data/crops_variety.csv')
@@ -471,8 +471,7 @@ if authentication_status:
                                    mime='application/zip')
         
         with col1:
-            st.image(img_file_url)
-            
+            st.image(img_file_url)            
         
         file_path=f'zone_img_tables/{zone_id}.csv'
         if bucket.blob(file_path).exists():
