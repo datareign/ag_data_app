@@ -446,7 +446,6 @@ if authentication_status:
             bucket=gcp_client.bucket(bucket_name)
             file_path=f'zone_pdf_labels/{zone_id}.pdf'
             if bucket.blob(file_path).exists():
-                #pdf_file=bucket.blob(file_path).open()
                 pdf_file=bucket.blob(file_path).download_as_bytes(raw_download=True)
                 st.download_button(label='Download Sample Labels',
                                    data=pdf_file,
@@ -455,7 +454,6 @@ if authentication_status:
             
             file_path=f'zone_pdf_samples/{zone_id}.pdf'
             if bucket.blob(file_path).exists():
-                #pdf_file=bucket.blob(file_path).open()
                 pdf_file=bucket.blob(file_path).download_as_bytes(raw_download=True)
                 st.download_button(label='Download Soil Data',
                                    data=pdf_file,
@@ -464,11 +462,11 @@ if authentication_status:
                 
             file_path=f'zone_load_sheets/{zone_id}.pdf'
             if bucket.blob(file_path).exists():
-                zip_file_bytes=bucket.blob(file_path).download_as_bytes(raw_download=True)
+                pdf_file=bucket.blob(file_path).download_as_bytes(raw_download=True)
                 st.download_button(label='Download Prescription Load Sheet',
-                                   data=zip_file_bytes,
-                                   file_name=f'{short_name}_prescription.zip',
-                                   mime='application/zip')
+                                   data=pdf_file,
+                                   file_name=f'{short_name}_prescription_load_sheet.pdf',
+                                   mime='application/octet-stream')
             
             file_path=f'zone_prescriptions/{zone_id}.zip'
             if bucket.blob(file_path).exists():
