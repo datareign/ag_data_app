@@ -149,7 +149,7 @@ if authentication_status:
           'View Input Recommendations',
           'View Nutrient Recommendations',
           'VRT Zone Dashboard']
-    st.sidebar.image('data/progro1.png',use_column_width=True)
+    st.sidebar.image('data/progro2.png',use_column_width=True)
     st.sidebar.write(f'Hello {name}')
     choice=st.sidebar.selectbox('Options',menu)
     authenticator.logout('Logout','sidebar')
@@ -462,6 +462,14 @@ if authentication_status:
                                    file_name=f'{short_name}_soil_data.pdf',
                                    mime='application/octet-stream')
                 
+            file_path=f'zone_load_sheets/{zone_id}.pdf'
+            if bucket.blob(file_path).exists():
+                zip_file_bytes=bucket.blob(file_path).download_as_bytes(raw_download=True)
+                st.download_button(label='Download Prescription Load Sheet',
+                                   data=zip_file_bytes,
+                                   file_name=f'{short_name}_prescription.zip',
+                                   mime='application/zip')
+            
             file_path=f'zone_prescriptions/{zone_id}.zip'
             if bucket.blob(file_path).exists():
                 zip_file_bytes=bucket.blob(file_path).download_as_bytes(raw_download=True)
