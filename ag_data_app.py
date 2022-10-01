@@ -487,7 +487,7 @@ if authentication_status:
             fig=px.line(zone_img_data,x='dates',y=zones,
                         #color_discrete_sequence=px.colors.sequential.Viridis,
                         markers=True,
-                        labels={'dates':'Dates','value':'Biomass Index Value',
+                        labels={'dates':'Dates','value':'Crop Vigor',
                                 'variable':'Zone'},
-                        title='Zone Biomass Curves')
+                        title='Zone Crop Vigor Curves')
             st.plotly_chart(fig)
