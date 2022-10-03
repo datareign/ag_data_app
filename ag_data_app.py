@@ -184,35 +184,38 @@ if authentication_status:
             ca_client=st.selectbox('Client',ca_clients)
 
         ca_df=get_crop_data(db,f'crop_assignments_{env}')
+        if len(ca_df)>1:
         
         #ca_df=ca_df[ca_df['user_name']==username]
-        ca_df=ca_df[ca_df['crop_year']==int(ca_year)]
-        ca_df['crop_year']=ca_df['crop_year'].astype(int)
-        ca_df=ca_df[ca_df['client']==ca_client]
+            ca_df=ca_df[ca_df['crop_year']==int(ca_year)]
+            ca_df['crop_year']=ca_df['crop_year'].astype(int)
+            ca_df=ca_df[ca_df['client']==ca_client]
 
-        if len(ca_df)>0:
-            ca_df.sort_values(by=['field','farm','client'],inplace=True)
-            ca_df.reset_index(drop=True,inplace=True)
-            ca_df=ca_df[['client','farm','field','crop_year',
-                         'acres','crop','variety','uuid']]
-            with st.expander('Results Table'):
-                st.dataframe(ca_df.style.format(CROP_STYLE))
-            st.write('If you wish to delete a record, copy the UUID and paste into the input cell below.')
-            doc_del=st.text_input('Delete Record',key=0)
-            if len(doc_del)>0:
-                db.collection(f'crop_assignments_{env}').document(doc_del).delete()
-                get_crop_data.clear()
-                st.button('Click to Delete',on_click=tools.clear_text)
-                #st.success('The data have been deleted.')
+            if len(ca_df)>0:
+                ca_df.sort_values(by=['field','farm','client'],inplace=True)
+                ca_df.reset_index(drop=True,inplace=True)
+                ca_df=ca_df[['client','farm','field','crop_year',
+                             'acres','crop','variety','uuid']]
+                with st.expander('Results Table'):
+                    st.dataframe(ca_df.style.format(CROP_STYLE))
+                st.write('If you wish to delete a record, copy the UUID and paste into the input cell below.')
+                doc_del=st.text_input('Delete Record',key=0)
+                if len(doc_del)>0:
+                    db.collection(f'crop_assignments_{env}').document(doc_del).delete()
+                    get_crop_data.clear()
+                    st.button('Click to Delete',on_click=tools.clear_text)
+                    #st.success('The data have been deleted.')
 
-            csv=ca_df.to_csv().encode('utf-8')
-            if st.download_button(label='Download Data',data=csv,
-                                  file_name='Crop_Assignments.csv',
-                                  mime='text/csv'):
-                st.success('Your dataset has downloaded.')
+                csv=ca_df.to_csv().encode('utf-8')
+                if st.download_button(label='Download Data',data=csv,
+                                      file_name='Crop_Assignments.csv',
+                                      mime='text/csv'):
+                    st.success('Your dataset has downloaded.')
 
+            else:
+                st.write('There are no crop assignments for this grower.')
         else:
-            st.write('There are no crop assignments for this grower.')
+            st.write('There are no crop assignements.')
 
 
     if choice=='View Input Recommendations':
@@ -463,7 +466,7 @@ if authentication_status:
             file_path=f'zone_load_sheets/{zone_id}.pdf'
             if bucket.blob(file_path).exists():
                 pdf_file=bucket.blob(file_path).download_as_bytes(raw_download=True)
-                st.download_button(label='Download Prescription Load Sheet',
+                st.download_button(label='Download Load Sheet',
                                    data=pdf_file,
                                    file_name=f'{short_name}_prescription_load_sheet.pdf',
                                    mime='application/octet-stream')
