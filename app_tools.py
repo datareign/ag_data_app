@@ -19,12 +19,13 @@ def unmutate_string(s,s_last):
     return s_unmutated
 
 def get_data(db,collection):
+    ##TODO need to filter 'out aaaaaa_template'
     df_list=[]
     crop_refs=db.collection(collection)
     for doc in crop_refs.stream():
         df_list.append(pd.DataFrame(doc.to_dict(),index=[0]))
     df=pd.concat(df_list)
-    return df    
+    return df
 
 def add_nutrients(fert_analysis,fert_name,fert_rate,rate_units,crop_year):
     nutrients=['N','P','K','S','Mg','Ca','B','Cl','Mn','Fe','Cu','Zn','Mo']
