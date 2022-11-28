@@ -70,3 +70,63 @@ def add_nutrients(fert_analysis,fert_name,fert_rate,rate_units,crop_year):
         else:
             df.loc[0,k]=0
     return df
+
+def get_prod_summaries(i_df,i_client,i_year):
+    i_df['total_prod']=i_df['rate'].astype(float)*i_df['acres'].astype(float)
+    prod_df_cols=['client','farm','year','product','type',
+                  'formulation','amount','units']
+    prod_df=pd.DataFrame(columns=prod_df_cols)
+    i=0
+    for farm_name,farm_group in i_df.groupby(by='farm'):
+        for form_name,form_group in farm_group.groupby(by='formulation'):
+            for prod_name,prod_group in form_group.groupby(by='product'):
+                for type_name,type_group in prod_group.groupby(by='type'):
+                    for units_name,units_group in type_group.groupby(by='units'):
+                        total_prod=units_group['total_prod'].sum()
+                        if form_name=='dry':
+                            units='pounds'
+                            if units_name=='tons/acre':                                
+                                total_prod=total_prod*2000
+                            elif units_name=='oz/acre':
+                                total_prod=total_prod/16
+                        elif form_name=='liquid':
+                            units='gallons'
+                            if units_name=='pt/acre':
+                                total_prod=total_prod/8
+                            elif units_name=='qt/acre':
+                                total_prod=total_prod/4
+                            elif units_name=='oz/acre':
+                                total_prod=total_prod/128
+                        prod_df.loc[i,'client']=i_client
+                        prod_df.loc[i,'farm']=farm_name
+                        prod_df.loc[i,'year']=i_year
+                        prod_df.loc[i,'product']=prod_name
+                        prod_df.loc[i,'type']=type_name
+                        prod_df.loc[i,'formulation']=form_name
+                        prod_df.loc[i,'amount']=total_prod
+                        prod_df.loc[i,'units']=units
+                        i+=1
+    prod_df.sort_values(by=['product','farm'],inplace=True)
+    prod_df.reset_index(drop=True,inplace=True)
+    return prod_df
+
+def get_crop_summaries(c_df,c_client,c_year):
+    crop_df_cols=['client','farm','year','crop','variety',
+                  'acres']
+    crop_df=pd.DataFrame(columns=crop_df_cols)
+    i=0
+    for farm_name,farm_group in c_df.groupby(by='farm'):
+        for crop_name,crop_group in farm_group.groupby(by='crop'):
+            for variety_name,variety_group in crop_group.groupby(by='variety'):
+                crop_df.loc[i,'client']=c_client
+                crop_df.loc[i,'farm']=farm_name
+                crop_df.loc[i,'year']=c_year
+                crop_df.loc[i,'crop']=crop_name
+                crop_df.loc[i,'variety']=variety_name
+                crop_df.loc[i,'acres']=variety_group['acres'].astype(float).sum()
+                i+=1
+                
+    crop_df.sort_values(by=['farm','crop'],inplace=True)
+    crop_df.reset_index(drop=True,inplace=True)
+    return crop_df
+        

@@ -1,9 +1,12 @@
 
-
 CROP_STYLE={'acres':'{:.1f}'}
 
 INPUT_STYLE={'acres':'{:.1f}',
              'rate':'{:.2f}'}
+
+PROD_STYLE={'amount':'{:,.1f}'}
+
+CROP_STYLE={'acres':'{:,.1f}'}
 
 NUTRIENT_STYLE={'Rate':'{:.2f}',
                 'N':'{:.1f}',

@@ -13,13 +13,10 @@ import streamlit_authenticator as stauth
 from google.cloud import storage
 import io
 import plotly.express as px
+from st_aggrid import GridOptionsBuilder,AgGrid,GridUpdateMode,DataReturnMode
 
-env='prod'
-
-#fields=pd.read_csv('data/fields.csv')
-#crops_variety=pd.read_csv('data/crops_variety.csv')
-#inputs=pd.read_csv('data/inputs.csv')
-#fert_analysis=pd.read_table('data/fert_analysis.txt')
+#env='prod'
+env='dev'
 
 key_dict=json.loads(st.secrets['textkey'])
 creds=service_account.Credentials.from_service_account_info(key_dict)
@@ -35,6 +32,7 @@ inputs_file='gen_tables/inputs.csv'
 fert_analysis_file='gen_tables/fert_analysis.txt'
 zone_data_file='zone_tables/zone_data_table.csv'
 
+## helpful data management functions
 @st.cache(allow_output_mutation=True)
 def get_base64_of_bin_file(bin_file):
     with open(bin_file, 'rb') as f:
@@ -55,39 +53,65 @@ def set_png_as_page_bg(png_file):
     st.markdown(page_bg_img, unsafe_allow_html=True)
     return
 
-@st.experimental_memo
-def get_crop_data(_dbase,collection):
+def get_data_query(_dbase,collection,crop_year,client_name):
+    docs_refs=_dbase.collection(collection)
+    docs=docs_refs.where('crop_year','==',crop_year).where('client','==',client_name).stream()
     df_list=[]
-    crop_refs=_dbase.collection(collection)
-    for doc in crop_refs.stream():
+    for doc in docs:
         df_list.append(pd.DataFrame(doc.to_dict(),index=[0]))
-    df=pd.concat(df_list)
-    return df
-
-@st.experimental_memo
-def get_input_data(_dbase,collection):
+    if len(df_list)>0:
+        df=pd.concat(df_list)
+        return df
+    else:
+        return None
+    
+def get_data_query_farm(_dbase,collection,crop_year,client_name,farm_name):
+    docs_refs=_dbase.collection(collection)
+    docs=docs_refs.where('crop_year','==',crop_year).where('client','==',client_name).where('farm','==',farm_name).stream()
     df_list=[]
-    crop_refs=_dbase.collection(collection)
-    for doc in crop_refs.stream():
+    for doc in docs:
         df_list.append(pd.DataFrame(doc.to_dict(),index=[0]))
-    df=pd.concat(df_list)
-    return df
+    if len(df_list)>0:
+        df=pd.concat(df_list)
+        return df
+    else:
+        return None
+    
+def get_data_query_field(_dbase,collection,crop_year,client_name,farm_name,field_name,i_type):
+    docs_refs=_dbase.collection(collection)
+    docs=docs_refs.where('crop_year','==',crop_year).where('client','==',client_name).where('farm','==',farm_name).where('field','==',field_name).where('type','==',i_type).stream()
+    df_list=[]
+    for doc in docs:
+        df_list.append(pd.DataFrame(doc.to_dict(),index=[0]))
+    if len(df_list)>0:
+        df=pd.concat(df_list)
+        return df
+    else:
+        return None
 
 def get_data(dbase,collection):
     df_list=[]
-    crop_refs=dbase.collection(collection)
-    for doc in crop_refs.stream():
+    doc_refs=dbase.collection(collection)
+    for doc in doc_refs.stream():
         df_list.append(pd.DataFrame(doc.to_dict(),index=[0]))
     df=pd.concat(df_list)
     return df
 
+def get_document(_dbase,collection,uid):
+    doc_ref=_dbase.collection(collection).document(uid)
+    doc=doc_ref.get()
+    if doc.exists:
+        doc=doc.to_dict()
+        return doc
+    else:
+        return None
 
 def get_signed_url(g_client,bucket_name, file_path,mins=1):
     bucket = g_client.bucket(bucket_name)
     #content = bucket.blob(file_path).download_as_string().decode("utf-8")
     url = bucket.blob(file_path).generate_signed_url(version='v4',
-                                                         expiration=datetime.timedelta(minutes=mins),
-                                                         method='GET')
+                                                     expiration=datetime.timedelta(minutes=mins),
+                                                     method='GET')
     return url
 
 @st.experimental_memo(ttl=3600)
@@ -102,6 +126,7 @@ def get_gcp_text(_g_client,bucket_name,file_path):
     df=pd.read_table(file_url)
     return df
 
+##Sets up main page
 set_png_as_page_bg('data/background3.jpg')
 
 users=get_data(db,'users')
@@ -116,7 +141,6 @@ for un,name,pw in zip(user_names,names,hashed_passwords):
     credentials['usernames'].update({un:user_dict})
 
 authenticator=stauth.Authenticate(credentials,'data_portal','abcdef',cookie_expiry_days=30)
-
 name,authentication_status,username=authenticator.login('Login','main')
 
 if authentication_status==False:
@@ -124,7 +148,7 @@ if authentication_status==False:
 if authentication_status==None:
     st.warning('Please enter your username and password.')
 if authentication_status:
-    
+    years=[2022,2023,2024,2025]
     fields=get_gcp_csv(gcp_client,bucket_name,field_file)
     crops_variety=get_gcp_csv(gcp_client,bucket_name,crops_file)
     inputs=get_gcp_csv(gcp_client,bucket_name,inputs_file)
@@ -138,20 +162,33 @@ if authentication_status:
     elif username=='mgriffel':
         if st.sidebar.button('Clear All Cache'):
             st.experimental_memo.clear()
-            
 
-    years=[2022,2023]
-
-    st.title('ProGro Data Management System')
-    menu=['Welcome',
-          'Assign Crops','Assign Inputs',
-          'View Crop Assignments',
-          'View Input Recommendations',
-          'View Nutrient Recommendations',
-          'VRT Zone Dashboard']
     st.sidebar.image('data/progro2.png',use_column_width=True)
     st.sidebar.write(f'Hello {name}')
-    choice=st.sidebar.selectbox('Options',menu)
+    st.title('ProGro Data Management System')
+    main_menu=['Welcome',
+               'Planning Tools',
+               'Application Tools',
+               'VRT Tools']
+    planning_options=['Assign Crops','Assign Inputs',
+                      'Delete Assignment',
+                      'View Crop Plan',
+                      'View Input Plan',
+                      'View Nutrient Plan']
+    application_options=['Log Input Application',
+                         'Delete Application']
+    vrt_options=['Zone Fertilizer Dashboard']
+    
+    main_choice=st.sidebar.selectbox('Site Navigation Option',main_menu)
+    if main_choice=='Welcome':
+        choice='Welcome'
+    elif main_choice=='Planning Tools':
+        choice=st.sidebar.selectbox('Planning Tools',planning_options)
+    elif main_choice=='Application Tools':
+        choice=st.sidebar.selectbox('Application Tools',application_options)
+    elif main_choice=='VRT Tools':
+        choice=st.sidebar.selectbox('VRT Tools',vrt_options)
+    
     authenticator.logout('Logout','sidebar')
     
     if choice=='Welcome':
@@ -163,64 +200,59 @@ if authentication_status:
                  restricted to drop-down selection boxes.
                  This application is connected to a secure and 
                  private cloud database. You also have the option 
-                 to download CSVs to maintain your own copies and 
+                 to download your data to maintain your own copies and 
                  use as you wish. If you have any questions or need
                  additional input options for products, crop types, and/or
                  varieties, please use the link below to contact the 
                  site administrator. Be sure to include detailed
-                 information. Thanks and Happy Farming!''')        
+                 information. Thanks and Happy Farming!''')
         
         st.markdown('<a href="mailto:agtech@progroagronomy.com">Contact us!</a>', unsafe_allow_html=True)
-        
 
-    if choice=='View Crop Assignments':
-        st.subheader('View Crop Assignments')
-        st.write('Select by Grower')
-        col0,col1=st.columns(2) 
+    if choice=='View Crop Plan':
+        st.subheader('View Crop Plan Assignments')
+        st.write('Select by crop year and grower.')
+        col0,col1=st.columns(2)
         with col0:
             ca_year=st.selectbox('Crop Year',years)
             ca_clients=np.sort(fields['Client'].unique())
         with col1:
             ca_client=st.selectbox('Client',ca_clients)
-
-        ca_df=get_crop_data(db,f'crop_assignments_{env}')
-        if len(ca_df)>1:
-        
-        #ca_df=ca_df[ca_df['user_name']==username]
-            ca_df=ca_df[ca_df['crop_year']==int(ca_year)]
+                
+        ca_df=get_data_query(db,f'crop_assignments_{env}',ca_year,ca_client)
+        if ca_df is not None:
+            st.write(f'There are {len(ca_df)} records in the table below.')
             ca_df['crop_year']=ca_df['crop_year'].astype(int)
-            ca_df=ca_df[ca_df['client']==ca_client]
-
-            if len(ca_df)>0:
-                ca_df.sort_values(by=['field','farm','client'],inplace=True)
-                ca_df.reset_index(drop=True,inplace=True)
-                ca_df=ca_df[['client','farm','field','crop_year',
-                             'acres','crop','variety','uuid']]
-                with st.expander('Results Table'):
-                    st.dataframe(ca_df.style.format(CROP_STYLE))
-                st.write('If you wish to delete a record, copy the UUID and paste into the input cell below.')
-                doc_del=st.text_input('Delete Record',key=0)
-                if len(doc_del)>0:
-                    db.collection(f'crop_assignments_{env}').document(doc_del).delete()
-                    get_crop_data.clear()
-                    st.button('Click to Delete',on_click=tools.clear_text)
-                    #st.success('The data have been deleted.')
-
-                csv=ca_df.to_csv().encode('utf-8')
-                if st.download_button(label='Download Data',data=csv,
-                                      file_name='Crop_Assignments.csv',
-                                      mime='text/csv'):
-                    st.success('Your dataset has downloaded.')
-
-            else:
-                st.write('There are no crop assignments for this grower.')
+            ca_df.sort_values(by=['farm','field','crop'],inplace=True)
+            ca_df.reset_index(drop=True,inplace=True)
+            ca_df=ca_df[['client','farm','field','crop_year',
+                         'acres','crop','variety','notes']]
+            
+            with st.expander('Results Table'):
+                st.dataframe(ca_df.style.format(CROP_STYLE))
+                
+            csv=ca_df.to_csv().encode('utf-8')
+            if st.download_button(label='Download Planned Crop Data',data=csv,
+                                  file_name='Crop_Assignments_Plan.csv',
+                                  mime='text/csv'):
+                st.success('Your dataset has downloaded.')
+            
+            crop_df=tools.get_crop_summaries(ca_df,ca_client,ca_year)            
+                                
+            with st.expander('Crop Summary Table'):
+                st.dataframe(crop_df.style.format(CROP_STYLE))
+                            
+            crop_csv=crop_df.to_csv().encode('utf-8')
+            if st.download_button(label='Download Planned Crop Summary Data',data=crop_csv,
+                                  file_name=f'Crop_Summary_Plan_{ca_client}_{ca_year}.csv',
+                                  mime='text/csv'):
+                st.success('Your crop summaries have downloaded.')
         else:
-            st.write('There are no crop assignements.')
+            st.write('There are no planned crop assignements in the system for this year and client.')
 
-
-    if choice=='View Input Recommendations':
-        st.subheader('View Input Assignments')
-        st.write('Select by Grower')
+    if choice=='View Input Plan':
+        st.subheader('View Input Plan Assignments')
+        st.write('Select by crop year and grower.')
         col0,col1=st.columns(2)    
         with col0:
             i_year=st.selectbox('Crop Year',years)
@@ -228,40 +260,151 @@ if authentication_status:
         with col1:
             i_client=st.selectbox('Client',i_clients)
 
-        i_df=get_input_data(db,f'crop_inputs_{env}')
-        
-        #i_df=i_df[i_df['user_name']==username]
-        i_df=i_df[i_df['crop_year']==int(i_year)]
-        i_df['crop_year']=i_df['crop_year'].astype(int)
-        i_df=i_df[i_df['client']==i_client]
-
-        if len(i_df)>0:
-            i_df.sort_values(by=['field','farm','client'],inplace=True)
+        i_df=get_data_query(db,f'crop_inputs_{env}',i_year,i_client)
+        if i_df is not None:
+            st.write(f'There are {len(i_df)} records in the table below.')
+            i_df['crop_year']=i_df['crop_year'].astype(int)
+            i_df.sort_values(by=['farm','field'],inplace=True)
             i_df.reset_index(drop=True,inplace=True)
             i_df=i_df[['client','farm','field','crop_year','acres',
                        'product','type','formulation','rate','units',
-                       'uuid','notes']]
-            #st.table(df.style.format(INPUT_STYLE))
+                       'notes']]
             with st.expander('Results Table'):
                 st.dataframe(i_df.style.format(INPUT_STYLE))
-
-            st.write('If you wish to delete a record, copy the UUID and paste into the input cell below.')
-            doc_del=st.text_input('Delete Record',key=0)
-            if len(doc_del)>0:
-                db.collection(f'crop_inputs_{env}').document(doc_del).delete()
-                get_input_data.clear()
-                st.button('Click to Delete',on_click=tools.clear_text)
-                #st.write('The data have been deleted.')
                 
             csv=i_df.to_csv().encode('utf-8')
-            if st.download_button(label='Download Data',data=csv,
-                                  file_name='Input_Assignments.csv',
+            if st.download_button(label='Download Planned Input Data',data=csv,
+                                  file_name=f'Input_Assignments_Plan_{i_client}_{i_year}.csv',
                                   mime='text/csv'):
-                st.success('Your dataset has downloaded.')
+                st.success('Your input dataset has downloaded.')
+                
+            ##This builds the product summary table
+            prod_df=tools.get_prod_summaries(i_df,i_client,i_year)            
+                                
+            with st.expander('Product Summary Table'):
+                st.dataframe(prod_df.style.format(PROD_STYLE))
+                            
+            prod_csv=prod_df.to_csv().encode('utf-8')
+            if st.download_button(label='Download Planned Product Summary Data',data=prod_csv,
+                                  file_name=f'Product_Summary_Plan_{i_client}_{i_year}.csv',
+                                  mime='text/csv'):
+                st.success('Your product summaries have downloaded.')
         else:
-            st.write('There are no inputs for this client')
+            st.write('There are no planned inputs for this year and client')
+            
+    if choice=='Delete Assignment':
+        input_types=inputs['input_type'].unique()
+        
+        st.subheader('Delete Planned Crop or Input Assignments')
+        
+        assignment=st.selectbox('Crop or Input',['Crop','Input'])
+        if assignment=='Input':
+            st.write('Select by crop year and field.')
+            col0,col1=st.columns(2)    
+            with col0:
+                e_year=st.selectbox('Crop Year',years)
+                e_type=st.selectbox('Input Type',input_types)
+                e_clients=np.sort(fields['Client'].unique())
+            with col1:
+                e_client=st.selectbox('Client',e_clients)
+                e_farms=np.sort(fields[fields['Client']==e_client]['Farm'].unique())
+                e_farm=st.selectbox('Farm',e_farms)
+                e_fields_sub=fields[fields['Client']==e_client]
+                e_fields_sub=e_fields_sub[e_fields_sub['Farm']==e_farm]
+                e_fields_list=np.sort(e_fields_sub['Field'].unique())
+            #with col1:
+                e_field=st.selectbox('Field',e_fields_list)
+                
 
-    if choice=='View Nutrient Recommendations':
+
+            e_df=get_data_query_field(db,f'crop_inputs_{env}',e_year,e_client,e_farm,e_field,e_type)
+            if e_df is not None:
+                #selected=None
+                st.write(f'There are {len(e_df)} records in the table below.')
+                e_df['crop_year']=e_df['crop_year'].astype(int)
+                e_df.sort_values(by='product',inplace=True)
+                e_df.reset_index(drop=True,inplace=True)
+                e_df=e_df[['client','farm','field','crop_year','acres',
+                           'product','type','formulation','rate','units',
+                           'uuid','notes']]
+                gb=GridOptionsBuilder.from_dataframe(e_df)
+                gb.configure_pagination(paginationAutoPageSize=True) #Add pagination
+                #gb.configure_side_bar() #Add a sidebar
+                gb.configure_selection('multiple',use_checkbox=True)                                   
+                grid_options=gb.build()
+                grid_response=AgGrid(e_df,
+                                     gridOptions=grid_options,
+                                     data_return_mode='AS_INPUT', 
+                                     update_mode='MODEL_CHANGED', 
+                                     fit_columns_on_grid_load=True,
+                                     theme='alpine',
+                                     enable_enterprise_modules=True,
+                                     height=350, 
+                                     width='100%',
+                                     reload_data=False)
+                #e_df1=grid_response['data']
+                selected=grid_response['selected_rows']
+                if len(selected)>0:
+                    if st.button('Click to Delete'):
+                        for row in selected:
+                            uid=row['uuid']
+                            db.collection(f'crop_inputs_{env}').document(uid).delete()
+                        st.success('The data have been deleted.')
+                        st.experimental_rerun()
+            else:
+                st.write('There are no planned inputs for this year, field, and type.')
+                    
+        if assignment=='Crop':
+            st.write('Select by crop year, grower, and farm.')
+            col0,col1=st.columns(2)    
+            with col0:
+                d_year=st.selectbox('Crop Year',years)
+                d_clients=np.sort(fields['Client'].unique())
+            with col1:
+                d_client=st.selectbox('Client',d_clients)
+                d_farms=np.sort(fields[fields['Client']==d_client]['Farm'].unique())
+            #with col1:
+                d_farm=st.selectbox('Farm',d_farms)
+
+            d_df=get_data_query_farm(db,f'crop_assignments_{env}',d_year,d_client,d_farm)
+            if d_df is not None:
+                #selected=None
+                st.write(f'There are {len(d_df)} records in the table below.')
+                d_df['crop_year']=d_df['crop_year'].astype(int)
+                d_df.sort_values(by=['farm','field','crop'],inplace=True)
+                d_df.reset_index(drop=True,inplace=True)
+                d_df=d_df[['client','farm','field','crop_year','acres',
+                           'crop','variety','uuid','notes']]
+                gb=GridOptionsBuilder.from_dataframe(d_df)
+                gb.configure_pagination(paginationAutoPageSize=True) #Add pagination
+                #gb.configure_side_bar() #Add a sidebar
+                gb.configure_selection('multiple',use_checkbox=True)                                   
+                grid_options=gb.build()
+                grid_response=AgGrid(d_df,
+                                     gridOptions=grid_options,
+                                     data_return_mode='AS_INPUT', 
+                                     update_mode='MODEL_CHANGED', 
+                                     fit_columns_on_grid_load=True,
+                                     theme='alpine',
+                                     enable_enterprise_modules=True,
+                                     height=350, 
+                                     width='100%',
+                                     reload_data=False)
+                #e_df1=grid_response['data']
+                selected=grid_response['selected_rows']
+                if len(selected)>0:
+                    if st.button('Click to Delete'):
+                        for row in selected:
+                            uid=row['uuid']
+                            #st.write(uid)
+                            db.collection(f'crop_assignments_{env}').document(uid).delete()
+                        st.success('The data have been deleted.')
+                        st.experimental_rerun()
+            else:
+                st.write('There are no planned crops for this year and field.')
+        
+
+    if choice=='View Nutrient Plan':
         st.subheader('View Applied Nutrients')
         col0,col1=st.columns(2)
         with col0:
@@ -276,17 +419,10 @@ if authentication_status:
             vn_fields_list=np.sort(vn_fields_sub['Field'].unique())
             vn_field=st.selectbox('Field',vn_fields_list)
 
-        n_df=get_input_data(db,f'crop_inputs_{env}')
-        
-        #n_df=n_df[n_df['user_name']==username]
-        n_df=n_df[n_df['crop_year']==int(vn_year)]
-        n_df['crop_year']=n_df['crop_year'].astype(int)
-        n_df=n_df[n_df['client']==vn_client]
-        n_df=n_df[n_df['farm']==vn_farm]
-        n_df=n_df[n_df['field']==vn_field]
-        n_df=n_df[n_df['type']=='fertilizer']
+        n_df=get_data_query_field(db,f'crop_inputs_{env}',vn_year,vn_client,vn_farm,vn_field,'fertilizer')
 
-        if len(n_df)>0:    
+        if n_df is not None:
+            n_df['crop_year']=n_df['crop_year'].astype(int)
             nutrient_dfs=[]
             for index,row in n_df.iterrows():
                 nutrient_dfs.append(tools.add_nutrients(fert_analysis,
@@ -295,14 +431,17 @@ if authentication_status:
                                                         row['units'],
                                                         int(vn_year)))
             nutrient_df=pd.concat(nutrient_dfs)
-            #nutrient_df['Crop Year']=nutrient_df['Crop Year'].astype(int)
+            nutrient_df['Crop Year']=nutrient_df['Crop Year'].astype(int)
             nutrient_df.reset_index(drop=True,inplace=True)
 
             nutrients=['N','P','K','S','Mg','Ca','B','Cl','Mn','Fe','Cu','Zn','Mo']
             if len(nutrient_df)>1:
                 nutrient_df.loc[len(nutrient_df),nutrients]=nutrient_df.sum(axis=0)
-                nutrient_df.loc[len(nutrient_df)-1,'Product']='Totals'
-
+                nutrient_df.loc[len(nutrient_df)-1,'Product']='Totals'                
+                st.write(f'There are {len(nutrient_df)-1} records in the table below.')
+            else:
+                st.write(f'There are {len(nutrient_df)} records in the table below.')
+                
             with st.expander('Results Table'):
                 st.dataframe(nutrient_df.style.format(NUTRIENT_STYLE))
             csv=nutrient_df.to_csv().encode('utf-8')
@@ -311,7 +450,7 @@ if authentication_status:
                                   mime='text/csv'):
                 st.success('Your dataset has downloaded.')     
         else:
-            st.write('There are no fertilizer records for this field')
+            st.write('There are no planned fertilizer records for this year and field')
 
     elif choice=='Assign Crops':
         st.subheader('Assign Crops')
@@ -325,9 +464,9 @@ if authentication_status:
             ac_varieties=np.sort(crops_variety[crops_variety['crop']==ac_crop]['variety'].unique())
             ac_variety=st.selectbox('Variety',ac_varieties)    
             ac_year=st.selectbox('Crop Year',years)
-
-        with col1:
             ac_client=st.selectbox('Client',ac_clients)
+
+        with col1:            
             ac_farms=np.sort(fields[fields['Client']==ac_client]['Farm'].unique())
             ac_farm=st.selectbox('Farm',ac_farms)
             ac_fields_sub=fields[fields['Client']==ac_client]
@@ -342,7 +481,7 @@ if authentication_status:
                     assert len(field_row)==1, 'There is a duplicate field name for this farm'
                     unq_fldid=field_row.iloc[0]['unq_fldid']
                     acres=field_row.iloc[0]['acres']
-                    uid=str(uuid.uuid1())
+                    uid=str(uuid.uuid4())
                     doc_ref=db.collection(f'crop_assignments_{env}').document(f'{uid}')
                     doc_ref.set({'log_datetime':now,
                                  'uuid':uid,
@@ -357,7 +496,7 @@ if authentication_status:
                                  'notes':ac_notes,
                                  'user_name':username})
                 st.success('You have successfully submitted your data.')
-                get_crop_data.clear()
+                #get_crop_data.clear()
 
     elif choice=='Assign Inputs':
         st.subheader('Assign Inputs')
@@ -371,7 +510,8 @@ if authentication_status:
 
         with col0:
             st.subheader('Enter Product Information')
-            input_forms=inputs['form'].unique()            
+            input_forms=inputs['form'].unique().tolist()
+            input_forms.insert(0,'<select>')
             input_form=st.selectbox('Product Formulation',input_forms)
 
             inputs_sub_form=inputs[inputs['form']==input_form]
@@ -408,7 +548,7 @@ if authentication_status:
                     assert len(field_row)==1, 'There is a duplicate field name for this farm'
                     unq_fldid=field_row.iloc[0]['unq_fldid']
                     acres=field_row.iloc[0]['acres']
-                    uid=str(uuid.uuid1())
+                    uid=str(uuid.uuid4())
                     doc_ref=db.collection(f'crop_inputs_{env}').document(f'{uid}')
                     doc_ref.set({'log_datetime':now,
                                  'uuid':uid,
@@ -426,10 +566,11 @@ if authentication_status:
                                  'notes':ai_notes,
                                  'user_name':username})
                 st.success('You have successfully submitted your data.')
-                get_input_data.clear()
+                #st.experimental_rerun()
+                #get_input_data.clear()
                 
-    elif choice=='VRT Zone Dashboard':
-        st.subheader('VRT Zone Dashboard')
+    elif choice=='Zone Fertilizer Dashboard':
+        st.subheader('Zone Fertilizer Dashboard')
         col0,col1=st.columns([1,2])
         with col0:
             vrt_clients=np.sort(zone_data_table['client'].unique())
