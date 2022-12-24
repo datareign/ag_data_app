@@ -14,6 +14,7 @@ from google.cloud import storage
 import io
 import plotly.express as px
 from st_aggrid import GridOptionsBuilder,AgGrid,GridUpdateMode,DataReturnMode
+st.set_page_config(layout="wide")
 
 #env='prod'
 env='dev'
@@ -312,14 +313,10 @@ if authentication_status:
                 e_fields_sub=fields[fields['Client']==e_client]
                 e_fields_sub=e_fields_sub[e_fields_sub['Farm']==e_farm]
                 e_fields_list=np.sort(e_fields_sub['Field'].unique())
-            #with col1:
                 e_field=st.selectbox('Field',e_fields_list)
-                
-
 
             e_df=get_data_query_field(db,f'crop_inputs_{env}',e_year,e_client,e_farm,e_field,e_type)
             if e_df is not None:
-                #selected=None
                 st.write(f'There are {len(e_df)} records in the table below.')
                 e_df['crop_year']=e_df['crop_year'].astype(int)
                 e_df.sort_values(by='product',inplace=True)
@@ -330,19 +327,20 @@ if authentication_status:
                 gb=GridOptionsBuilder.from_dataframe(e_df)
                 gb.configure_pagination(paginationAutoPageSize=True) #Add pagination
                 #gb.configure_side_bar() #Add a sidebar
-                gb.configure_selection('multiple',use_checkbox=True)                                   
+                gb.configure_selection('multiple',use_checkbox=True)
+                gb.configure_column('acres',type=['numericColumn','numberColumnFilter','customNumericFormat'],
+                                    precision=1)
                 grid_options=gb.build()
                 grid_response=AgGrid(e_df,
                                      gridOptions=grid_options,
                                      data_return_mode='AS_INPUT', 
                                      update_mode='MODEL_CHANGED', 
-                                     fit_columns_on_grid_load=True,
+                                     fit_columns_on_grid_load=False,
                                      theme='alpine',
                                      enable_enterprise_modules=True,
-                                     height=350, 
+                                     height=550, 
                                      width='100%',
                                      reload_data=False)
-                #e_df1=grid_response['data']
                 selected=grid_response['selected_rows']
                 if len(selected)>0:
                     if st.button('Click to Delete'):
@@ -363,12 +361,10 @@ if authentication_status:
             with col1:
                 d_client=st.selectbox('Client',d_clients)
                 d_farms=np.sort(fields[fields['Client']==d_client]['Farm'].unique())
-            #with col1:
                 d_farm=st.selectbox('Farm',d_farms)
 
             d_df=get_data_query_farm(db,f'crop_assignments_{env}',d_year,d_client,d_farm)
             if d_df is not None:
-                #selected=None
                 st.write(f'There are {len(d_df)} records in the table below.')
                 d_df['crop_year']=d_df['crop_year'].astype(int)
                 d_df.sort_values(by=['farm','field','crop'],inplace=True)
@@ -378,31 +374,30 @@ if authentication_status:
                 gb=GridOptionsBuilder.from_dataframe(d_df)
                 gb.configure_pagination(paginationAutoPageSize=True) #Add pagination
                 #gb.configure_side_bar() #Add a sidebar
-                gb.configure_selection('multiple',use_checkbox=True)                                   
+                gb.configure_selection('multiple',use_checkbox=True)
+                gb.configure_column('acres',type=['numericColumn','numberColumnFilter','customNumericFormat'],
+                                    precision=1)
                 grid_options=gb.build()
                 grid_response=AgGrid(d_df,
                                      gridOptions=grid_options,
                                      data_return_mode='AS_INPUT', 
                                      update_mode='MODEL_CHANGED', 
-                                     fit_columns_on_grid_load=True,
+                                     fit_columns_on_grid_load=False,
                                      theme='alpine',
                                      enable_enterprise_modules=True,
-                                     height=350, 
+                                     height=550, 
                                      width='100%',
                                      reload_data=False)
-                #e_df1=grid_response['data']
                 selected=grid_response['selected_rows']
                 if len(selected)>0:
                     if st.button('Click to Delete'):
                         for row in selected:
                             uid=row['uuid']
-                            #st.write(uid)
                             db.collection(f'crop_assignments_{env}').document(uid).delete()
                         st.success('The data have been deleted.')
                         st.experimental_rerun()
             else:
                 st.write('There are no planned crops for this year and field.')
-        
 
     if choice=='View Nutrient Plan':
         st.subheader('View Applied Nutrients')
@@ -496,7 +491,6 @@ if authentication_status:
                                  'notes':ac_notes,
                                  'user_name':username})
                 st.success('You have successfully submitted your data.')
-                #get_crop_data.clear()
 
     elif choice=='Assign Inputs':
         st.subheader('Assign Inputs')
@@ -566,8 +560,6 @@ if authentication_status:
                                  'notes':ai_notes,
                                  'user_name':username})
                 st.success('You have successfully submitted your data.')
-                #st.experimental_rerun()
-                #get_input_data.clear()
                 
     elif choice=='Zone Fertilizer Dashboard':
         st.subheader('Zone Fertilizer Dashboard')
