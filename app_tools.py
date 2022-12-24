@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+from variables import *
 
 def clear_text():
     st.session_state[0]=""
@@ -129,4 +130,6 @@ def get_crop_summaries(c_df,c_client,c_year):
     crop_df.sort_values(by=['farm','crop'],inplace=True)
     crop_df.reset_index(drop=True,inplace=True)
     return crop_df
-        
+
+def get_agrimet_daily_address(station,param,start,end):
+    return f'{AGRIMET_BASE_DAILY_ADDRESS}{station} {param}&start={start}&end={end}&format=html'

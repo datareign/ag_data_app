@@ -6,6 +6,7 @@ from google.cloud import firestore
 from google.oauth2 import service_account
 import json
 import app_tools as tools
+from variables import *
 from styles import *
 import uuid
 import base64
@@ -15,6 +16,7 @@ import io
 import plotly.express as px
 from st_aggrid import GridOptionsBuilder,AgGrid,GridUpdateMode,DataReturnMode
 st.set_page_config(layout="wide")
+import requests
 
 #env='prod'
 env='dev'
@@ -149,7 +151,7 @@ if authentication_status==False:
 if authentication_status==None:
     st.warning('Please enter your username and password.')
 if authentication_status:
-    years=[2022,2023,2024,2025]
+    years=YEARS
     fields=get_gcp_csv(gcp_client,bucket_name,field_file)
     crops_variety=get_gcp_csv(gcp_client,bucket_name,crops_file)
     inputs=get_gcp_csv(gcp_client,bucket_name,inputs_file)
@@ -167,50 +169,154 @@ if authentication_status:
     st.sidebar.image('data/progro2.png',use_column_width=True)
     st.sidebar.write(f'Hello {name}')
     st.title('ProGro Data Management System')
-    main_menu=['Welcome',
-               'Planning Tools',
-               'Application Tools',
-               'VRT Tools']
-    planning_options=['Assign Crops','Assign Inputs',
-                      'Delete Assignment',
-                      'View Crop Plan',
-                      'View Input Plan',
-                      'View Nutrient Plan']
-    application_options=['Log Input Application',
-                         'Delete Application']
-    vrt_options=['Zone Fertilizer Dashboard']
     
-    main_choice=st.sidebar.selectbox('Site Navigation Option',main_menu)
+    main_choice=st.sidebar.selectbox('Site Navigation Option',MAIN_MENU)
     if main_choice=='Welcome':
         choice='Welcome'
     elif main_choice=='Planning Tools':
-        choice=st.sidebar.selectbox('Planning Tools',planning_options)
+        choice=st.sidebar.selectbox('Planning Tools',PLANNING_OPTIONS)
     elif main_choice=='Application Tools':
-        choice=st.sidebar.selectbox('Application Tools',application_options)
+        choice=st.sidebar.selectbox('Application Tools',APPLICATION_OPTIONS)
     elif main_choice=='VRT Tools':
-        choice=st.sidebar.selectbox('VRT Tools',vrt_options)
+        choice=st.sidebar.selectbox('VRT Tools',VRT_OPTIONS)
+    elif main_choice=='Agrimet Data':
+        choice=st.sidebar.selectbox('VRT Tools',AGRIMET_OPTIONS)
     
     authenticator.logout('Logout','sidebar')
     
     if choice=='Welcome':
-        st.write('''Welcome to the ProGro Data Management System.
-                 This interface is designed to allow users to develop 
-                 detailed crop plans including planned field assignments, 
-                 varieties/hybrids, and inputs. To make this process
-                 as efficient as possible, almost all entries are
-                 restricted to drop-down selection boxes.
-                 This application is connected to a secure and 
-                 private cloud database. You also have the option 
-                 to download your data to maintain your own copies and 
-                 use as you wish. If you have any questions or need
-                 additional input options for products, crop types, and/or
-                 varieties, please use the link below to contact the 
-                 site administrator. Be sure to include detailed
-                 information. Thanks and Happy Farming!''')
-        
+        st.write(WELCOME)        
         st.markdown('<a href="mailto:agtech@progroagronomy.com">Contact us!</a>', unsafe_allow_html=True)
+    
+    elif choice=='Agrimet Daily':
+        start='2022-12-1'
+        end='2022-12-20'
+        param='mm'
 
-    if choice=='View Crop Plan':
+        stations=AGRIMET_STATIONS.keys()
+        station=st.selectbox('Agrimet Station',stations)
+        station_id=AGRIMET_STATIONS[station]
+        agrimet_address=tools.get_agrimet_daily_address(station_id,param,start,end)
+        st.write(agrimet_address)
+        req=requests.get(agrimet_address)
+        df=pd.read_html(req.text,header=0)[0]
+        st.write(df)
+        
+    elif choice=='Assign Crops':
+        st.subheader('Assign Crops')
+        now=datetime.datetime.utcnow()
+        ac_clients=np.sort(fields['Client'].unique())
+        ac_crops=np.sort(crops_variety['crop'].unique())
+
+        col0,col1=st.columns(2)
+        with col0:
+            ac_crop=st.selectbox('Crop',ac_crops,0)
+            ac_varieties=np.sort(crops_variety[crops_variety['crop']==ac_crop]['variety'].unique())
+            ac_variety=st.selectbox('Variety',ac_varieties)    
+            ac_year=st.selectbox('Crop Year',years)
+            ac_client=st.selectbox('Client',ac_clients)
+
+        with col1:            
+            ac_farms=np.sort(fields[fields['Client']==ac_client]['Farm'].unique())
+            ac_farm=st.selectbox('Farm',ac_farms)
+            ac_fields_sub=fields[fields['Client']==ac_client]
+            ac_fields_sub=ac_fields_sub[ac_fields_sub['Farm']==ac_farm]
+            ac_fields_list=np.sort(ac_fields_sub['Field'].unique())
+            ac_fields_list=st.multiselect('Fields',ac_fields_list)
+            ac_notes=st.text_area('Notes')
+
+            if st.button('SUBMIT'):
+                for field in ac_fields_list:
+                    field_row=ac_fields_sub[ac_fields_sub['Field']==field]
+                    assert len(field_row)==1, 'There is a duplicate field name for this farm'
+                    unq_fldid=field_row.iloc[0]['unq_fldid']
+                    acres=field_row.iloc[0]['acres']
+                    uid=str(uuid.uuid4())
+                    doc_ref=db.collection(f'crop_assignments_{env}').document(f'{uid}')
+                    doc_ref.set({'log_datetime':now,
+                                 'uuid':uid,
+                                 'unq_fldid':int(unq_fldid),
+                                 'crop_year':int(ac_year),
+                                 'client':ac_client,
+                                 'farm':ac_farm,
+                                 'field':field,
+                                 'acres':float(acres),
+                                 'crop':ac_crop,
+                                 'variety':ac_variety,
+                                 'notes':ac_notes,
+                                 'user_name':username})
+                st.success('You have successfully submitted your data.')
+
+    elif choice=='Assign Inputs':
+        st.subheader('Assign Inputs')
+        now=datetime.datetime.utcnow()
+        col0,col1=st.columns(2)
+
+        with col0:
+            st.subheader('Enter Product Information')
+            input_forms=inputs['form'].unique().tolist()
+            input_forms.insert(0,'<select>')
+            input_form=st.selectbox('Product Formulation',input_forms)
+
+            inputs_sub_form=inputs[inputs['form']==input_form]
+            input_types=inputs_sub_form['input_type'].unique()
+            if input_form=='liquid':
+                LIQUID_UNITS.insert(0,'<select>')
+                units=st.selectbox('Application Units',LIQUID_UNITS)
+            elif input_form=='dry':
+                DRY_UNITS.insert(0,'<select>')
+                units=st.selectbox('Application Units',DRY_UNITS)
+
+            input_type=st.selectbox('Product Type',input_types)
+            inputs_sub_type=inputs_sub_form[inputs_sub_form['input_type']==input_type]
+            products=np.sort(inputs_sub_type['input'].unique()).tolist()
+            products.insert(0,'<select>')
+            product=st.selectbox('Product',products)
+            rate=st.number_input('Application Rate')
+
+        with col1:
+            st.subheader('Assign Fields')
+            ai_clients=np.sort(fields['Client'].unique()).tolist()
+            years.insert(0,'<select>')
+
+            ai_year=st.selectbox('Crop Year',years)
+            ai_clients.insert(0,'<select>')
+            ai_client=st.selectbox('Client',ai_clients)
+            ai_farms=np.sort(fields[fields['Client']==ai_client]['Farm'].unique()).tolist()
+            ai_farms.insert(0,'<select>')
+            ai_farm=st.selectbox('Farm',ai_farms)
+            ai_fields_sub=fields[fields['Client']==ai_client]
+            ai_fields_sub=ai_fields_sub[ai_fields_sub['Farm']==ai_farm]
+            ai_fields_list=np.sort(ai_fields_sub['Field'].unique())
+            ai_fields_list=st.multiselect('Fields',ai_fields_list)
+            ai_notes=st.text_area('Notes')
+
+            if st.button('SUBMIT'):
+                for field in ai_fields_list:
+                    field_row=ai_fields_sub[ai_fields_sub['Field']==field]
+                    assert len(field_row)==1, 'There is a duplicate field name for this farm'
+                    unq_fldid=field_row.iloc[0]['unq_fldid']
+                    acres=field_row.iloc[0]['acres']
+                    uid=str(uuid.uuid4())
+                    doc_ref=db.collection(f'crop_inputs_{env}').document(f'{uid}')
+                    doc_ref.set({'log_datetime':now,
+                                 'uuid':uid,
+                                 'unq_fldid':int(unq_fldid),
+                                 'crop_year':int(ai_year),
+                                 'client':ai_client,
+                                 'farm':ai_farm,
+                                 'field':field,
+                                 'acres':float(acres),
+                                 'product':product,
+                                 'type':input_type,
+                                 'formulation':input_form,
+                                 'rate':float(rate),
+                                 'units':units,
+                                 'notes':ai_notes,
+                                 'user_name':username})
+                st.success('You have successfully submitted your data.')
+
+    elif choice=='View Crop Plan':
         st.subheader('View Crop Plan Assignments')
         st.write('Select by crop year and grower.')
         col0,col1=st.columns(2)
@@ -251,7 +357,7 @@ if authentication_status:
         else:
             st.write('There are no planned crop assignements in the system for this year and client.')
 
-    if choice=='View Input Plan':
+    elif choice=='View Input Plan':
         st.subheader('View Input Plan Assignments')
         st.write('Select by crop year and grower.')
         col0,col1=st.columns(2)    
@@ -293,7 +399,7 @@ if authentication_status:
         else:
             st.write('There are no planned inputs for this year and client')
             
-    if choice=='Delete Assignment':
+    elif choice=='Delete Assignment':
         input_types=inputs['input_type'].unique()
         
         st.subheader('Delete Planned Crop or Input Assignments')
@@ -352,7 +458,7 @@ if authentication_status:
             else:
                 st.write('There are no planned inputs for this year, field, and type.')
                     
-        if assignment=='Crop':
+        elif assignment=='Crop':
             st.write('Select by crop year, grower, and farm.')
             col0,col1=st.columns(2)    
             with col0:
@@ -399,8 +505,8 @@ if authentication_status:
             else:
                 st.write('There are no planned crops for this year and field.')
 
-    if choice=='View Nutrient Plan':
-        st.subheader('View Applied Nutrients')
+    elif choice=='View Nutrient Plan':
+        st.subheader('View Planned Nutrients')
         col0,col1=st.columns(2)
         with col0:
             vn_year=st.selectbox('Crop Year',years)
@@ -429,9 +535,8 @@ if authentication_status:
             nutrient_df['Crop Year']=nutrient_df['Crop Year'].astype(int)
             nutrient_df.reset_index(drop=True,inplace=True)
 
-            nutrients=['N','P','K','S','Mg','Ca','B','Cl','Mn','Fe','Cu','Zn','Mo']
             if len(nutrient_df)>1:
-                nutrient_df.loc[len(nutrient_df),nutrients]=nutrient_df.sum(axis=0)
+                nutrient_df.loc[len(nutrient_df),NUTRIENTS]=nutrient_df.sum(axis=0)
                 nutrient_df.loc[len(nutrient_df)-1,'Product']='Totals'                
                 st.write(f'There are {len(nutrient_df)-1} records in the table below.')
             else:
@@ -447,120 +552,7 @@ if authentication_status:
         else:
             st.write('There are no planned fertilizer records for this year and field')
 
-    elif choice=='Assign Crops':
-        st.subheader('Assign Crops')
-        now=datetime.datetime.utcnow()
-        ac_clients=np.sort(fields['Client'].unique())
-        ac_crops=np.sort(crops_variety['crop'].unique())
-
-        col0,col1=st.columns(2)
-        with col0:
-            ac_crop=st.selectbox('Crop',ac_crops,0)
-            ac_varieties=np.sort(crops_variety[crops_variety['crop']==ac_crop]['variety'].unique())
-            ac_variety=st.selectbox('Variety',ac_varieties)    
-            ac_year=st.selectbox('Crop Year',years)
-            ac_client=st.selectbox('Client',ac_clients)
-
-        with col1:            
-            ac_farms=np.sort(fields[fields['Client']==ac_client]['Farm'].unique())
-            ac_farm=st.selectbox('Farm',ac_farms)
-            ac_fields_sub=fields[fields['Client']==ac_client]
-            ac_fields_sub=ac_fields_sub[ac_fields_sub['Farm']==ac_farm]
-            ac_fields_list=np.sort(ac_fields_sub['Field'].unique())
-            ac_fields_list=st.multiselect('Fields',ac_fields_list)
-            ac_notes=st.text_area('Notes')
-
-            if st.button('SUBMIT'):
-                for field in ac_fields_list:
-                    field_row=ac_fields_sub[ac_fields_sub['Field']==field]
-                    assert len(field_row)==1, 'There is a duplicate field name for this farm'
-                    unq_fldid=field_row.iloc[0]['unq_fldid']
-                    acres=field_row.iloc[0]['acres']
-                    uid=str(uuid.uuid4())
-                    doc_ref=db.collection(f'crop_assignments_{env}').document(f'{uid}')
-                    doc_ref.set({'log_datetime':now,
-                                 'uuid':uid,
-                                 'unq_fldid':int(unq_fldid),
-                                 'crop_year':int(ac_year),
-                                 'client':ac_client,
-                                 'farm':ac_farm,
-                                 'field':field,
-                                 'acres':float(acres),
-                                 'crop':ac_crop,
-                                 'variety':ac_variety,
-                                 'notes':ac_notes,
-                                 'user_name':username})
-                st.success('You have successfully submitted your data.')
-
-    elif choice=='Assign Inputs':
-        st.subheader('Assign Inputs')
-
-        now=datetime.datetime.utcnow()
-
-        dry_units=['lbs/acre','oz/acre','tons/acre']
-        liquid_units=['qt/acre','gal/acre','pt/acre','oz/acre']
-
-        col0,col1=st.columns(2)
-
-        with col0:
-            st.subheader('Enter Product Information')
-            input_forms=inputs['form'].unique().tolist()
-            input_forms.insert(0,'<select>')
-            input_form=st.selectbox('Product Formulation',input_forms)
-
-            inputs_sub_form=inputs[inputs['form']==input_form]
-            input_types=inputs_sub_form['input_type'].unique()
-            if input_form=='liquid':
-                units=st.selectbox('Application Units',liquid_units)
-            elif input_form=='dry':
-                units=st.selectbox('Application Units',dry_units)
-
-            input_type=st.selectbox('Product Type',input_types)
-            inputs_sub_type=inputs_sub_form[inputs_sub_form['input_type']==input_type]
-            products=inputs_sub_type['input'].unique()
-
-            product=st.selectbox('Product',products)
-            rate=st.number_input('Application Rate')
-
-        with col1:
-            st.subheader('Assign Fields')
-            ai_clients=np.sort(fields['Client'].unique())
-
-            ai_year=st.selectbox('Crop Year',years)
-            ai_client=st.selectbox('Client',ai_clients)
-            ai_farms=np.sort(fields[fields['Client']==ai_client]['Farm'].unique())
-            ai_farm=st.selectbox('Farm',ai_farms)
-            ai_fields_sub=fields[fields['Client']==ai_client]
-            ai_fields_sub=ai_fields_sub[ai_fields_sub['Farm']==ai_farm]
-            ai_fields_list=np.sort(ai_fields_sub['Field'].unique())
-            ai_fields_list=st.multiselect('Fields',ai_fields_list)
-            ai_notes=st.text_area('Notes')
-
-            if st.button('SUBMIT'):
-                for field in ai_fields_list:
-                    field_row=ai_fields_sub[ai_fields_sub['Field']==field]
-                    assert len(field_row)==1, 'There is a duplicate field name for this farm'
-                    unq_fldid=field_row.iloc[0]['unq_fldid']
-                    acres=field_row.iloc[0]['acres']
-                    uid=str(uuid.uuid4())
-                    doc_ref=db.collection(f'crop_inputs_{env}').document(f'{uid}')
-                    doc_ref.set({'log_datetime':now,
-                                 'uuid':uid,
-                                 'unq_fldid':int(unq_fldid),
-                                 'crop_year':int(ai_year),
-                                 'client':ai_client,
-                                 'farm':ai_farm,
-                                 'field':field,
-                                 'acres':float(acres),
-                                 'product':product,
-                                 'type':input_type,
-                                 'formulation':input_form,
-                                 'rate':float(rate),
-                                 'units':units,
-                                 'notes':ai_notes,
-                                 'user_name':username})
-                st.success('You have successfully submitted your data.')
-                
+    
     elif choice=='Zone Fertilizer Dashboard':
         st.subheader('Zone Fertilizer Dashboard')
         col0,col1=st.columns([1,2])
