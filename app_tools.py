@@ -1,5 +1,8 @@
 import pandas as pd
 import streamlit as st
+import requests
+import pandas as pd
+import io
 from variables import *
 
 def clear_text():
@@ -133,3 +136,43 @@ def get_crop_summaries(c_df,c_client,c_year):
 
 def get_agrimet_daily_address(station,param,start,end):
     return f'{AGRIMET_BASE_DAILY_ADDRESS}{station} {param}&start={start}&end={end}&format=html'
+
+def get_agrimet_daily_et_address(station,year):
+    return f'{AGRIMET_BASE_DAILY_ET_ADDRESS}{station}{year[-2:]}et.txt'
+
+def get_date_string(dt):
+    year=dt.year
+    month=dt.month
+    day=dt.day
+    dt_string=f'{year}-{month}-{day}'
+    return dt_string
+
+def get_et_table(station_id,et_year):
+    agrimet_et_address=get_agrimet_daily_et_address(station_id,str(et_year))
+    req_et=requests.get(agrimet_et_address).content
+    agrimet_et_df=pd.read_csv(io.StringIO(req_et.decode('utf-8')),delim_whitespace=True,skiprows=1)
+    agrimet_et_df=agrimet_et_df.iloc[1:]
+    agrimet_et_df=agrimet_et_df.dropna()
+    agrimet_et_df['DATE']=agrimet_et_df['DATE']+f'/{str(et_year)}'
+    agrimet_et_df['DATE']=pd.to_datetime(agrimet_et_df['DATE']).dt.date
+    agrimet_et_df.sort_values(by='DATE',inplace=True)
+    return agrimet_et_df
+
+def get_et_data(df):
+    cols=['crop_code','crop_name','start_date','dates','data']
+    crop_df=pd.DataFrame(columns=cols)
+    i=0
+    for col in df.columns:
+        if (col!='DATE') and (col!='ETr'):
+            df1=df[df[col]!='--']
+            crop_df.loc[i,'crop_code']=col[:4]
+            crop_df.loc[i,'crop_name']=AGRIMET_CROP_CODES[col[:4]]
+            crop_df.loc[i,'start_date']=df1.iloc[0]['DATE']
+            crop_df.at[i,'dates']=df1['DATE'].to_list()
+            crop_df.at[i,'data']=df1[col].astype(float).to_list()
+            i+=1
+    crop_df.drop_duplicates(subset=['crop_code','start_date'],inplace=True)
+    return crop_df
+
+    
+    

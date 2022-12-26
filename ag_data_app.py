@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import datetime
+from dateutil.relativedelta import relativedelta
 from google.cloud import firestore
 from google.oauth2 import service_account
 import json
@@ -130,6 +131,13 @@ def get_gcp_text(_g_client,bucket_name,file_path):
     return df
 
 ##Sets up main page
+hide_streamlit_style="""
+            <style>
+            footer {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_streamlit_style,unsafe_allow_html=True)
+
 set_png_as_page_bg('data/background3.jpg')
 
 users=get_data(db,'users')
@@ -170,7 +178,7 @@ if authentication_status:
     st.sidebar.write(f'Hello {name}')
     st.title('ProGro Data Management System')
     
-    main_choice=st.sidebar.selectbox('Site Navigation Option',MAIN_MENU)
+    main_choice=st.sidebar.selectbox('Site Navigation Options',MAIN_MENU)
     if main_choice=='Welcome':
         choice='Welcome'
     elif main_choice=='Planning Tools':
@@ -179,7 +187,7 @@ if authentication_status:
         choice=st.sidebar.selectbox('Application Tools',APPLICATION_OPTIONS)
     elif main_choice=='VRT Tools':
         choice=st.sidebar.selectbox('VRT Tools',VRT_OPTIONS)
-    elif main_choice=='Agrimet Data':
+    elif main_choice=='Agrimet Dashboards':
         choice=st.sidebar.selectbox('VRT Tools',AGRIMET_OPTIONS)
     
     authenticator.logout('Logout','sidebar')
@@ -188,19 +196,135 @@ if authentication_status:
         st.write(WELCOME)        
         st.markdown('<a href="mailto:agtech@progroagronomy.com">Contact us!</a>', unsafe_allow_html=True)
     
-    elif choice=='Agrimet Daily':
-        start='2022-12-1'
-        end='2022-12-20'
-        param='mm'
-
-        stations=AGRIMET_STATIONS.keys()
-        station=st.selectbox('Agrimet Station',stations)
-        station_id=AGRIMET_STATIONS[station]
-        agrimet_address=tools.get_agrimet_daily_address(station_id,param,start,end)
-        st.write(agrimet_address)
+    elif choice=='Agrimet Daily Weather':
+        st.subheader('Query daily Agrimet data by station ID, weather parameters, and date ranges.')
+        params=list(AGRIMET_PARAMS)
+        params=sorted(params)
+        stations=list(AGRIMET_STATIONS)
+        stations=sorted(stations)
+        now=datetime.datetime.utcnow()
+        now_minus_1=datetime.datetime.utcnow()-relativedelta(days=1)
+        
+        col0,col1,col2,col3=st.columns(4)
+        with col0:
+            station=st.selectbox('Agrimet Station',stations)
+            station_id=AGRIMET_STATIONS[station]
+        with col1:
+            param=st.selectbox('Weather Parameter',params)
+            param_id=AGRIMET_PARAMS[param]
+        with col2:
+            start_date=st.date_input('Start Date',value=now_minus_1,max_value=now_minus_1)
+            start=tools.get_date_string(start_date)
+        with col3:
+            end_date=st.date_input('End Date',min_value=start_date,max_value=now)
+            end=tools.get_date_string(end_date)
+        
+        agrimet_address=tools.get_agrimet_daily_address(station_id,param_id,start,end)
         req=requests.get(agrimet_address)
-        df=pd.read_html(req.text,header=0)[0]
-        st.write(df)
+        agrimet_df=pd.read_html(req.text,header=0)[0]
+        agrimet_df=agrimet_df.dropna()
+        
+        start_date_prev=start_date-relativedelta(years=1)
+        end_date_prev=end_date-relativedelta(years=1)
+        end_date_prev=end_date_prev-relativedelta(days=1)
+        start_prev=tools.get_date_string(start_date_prev)
+        end_prev=tools.get_date_string(end_date_prev)
+        
+        agrimet_address_prev=tools.get_agrimet_daily_address(station_id,param_id,start_prev,end_prev)
+        req_prev=requests.get(agrimet_address_prev)
+        agrimet_df_prev=pd.read_html(req_prev.text,header=0)[0]
+        agrimet_df_prev=agrimet_df_prev.dropna()
+        
+        if len(agrimet_df)>1:
+            agrimet_df['DateTime']=pd.to_datetime(agrimet_df['DateTime'])
+            agrimet_df.set_index('DateTime',inplace=True)
+            agrimet_df=agrimet_df.rename(columns={list(agrimet_df)[0]:param})
+            agrimet_df['label']='Current Year'
+            if param_id=='tg':
+                total=agrimet_df[param].sum()
+                st.write(f'Total accumulated growing degree days for the selected time period: {total:0.2f}')
+            elif param_id=='pp':
+                total=agrimet_df[param].sum()
+                st.write(f'Total accumulated precipitation (inches) for the selected time period: {total:0.2f}')
+            if len(agrimet_df_prev)>1:
+                agrimet_df_prev['DateTime']=pd.to_datetime(agrimet_df_prev['DateTime'])
+                agrimet_df_prev['DateTime']=agrimet_df_prev['DateTime']+pd.DateOffset(years=1)
+                agrimet_df_prev.set_index('DateTime',inplace=True)
+                agrimet_df_prev=agrimet_df_prev.rename(columns={list(agrimet_df_prev)[0]:param})
+                agrimet_df_prev['label']='Previous Year'
+                agrimet_df_final=pd.concat([agrimet_df,agrimet_df_prev])
+            else:
+                agrimet_df_final=agrimet_df
+                
+            fig=px.line(agrimet_df_final,x=agrimet_df_final.index,y=param,
+                        color='label',
+                        markers=True,
+                        title=station)
+            st.plotly_chart(fig)
+            st.write('Data Source: https://www.usbr.gov/pn/agrimet/')
+
+        else:
+            st.write('No data are available')
+            
+    elif choice=='Agrimet Daily Crop ET':
+        st.subheader('Query daily Agrimet evapotranspiration data by station ID and crop.')
+        stations=list(AGRIMET_STATIONS)
+        stations=sorted(stations)
+        now=datetime.datetime.utcnow()
+        if now.month>3:
+            et_year=now.year
+        else:
+            et_year=now.year-1
+        
+        col0,col1,col2=st.columns(3)
+        with col0:
+            years=[]
+            for i in range(5):
+                years.append(et_year)
+                et_year-=1
+            selected_year=st.selectbox('Select Crop Year',years)
+        with col1:
+            station=st.selectbox('Agrimet Station',stations)
+            station_id=AGRIMET_STATIONS[station]            
+            agrimet_et_df=tools.get_et_table(station_id,selected_year)
+            crops_df=tools.get_et_data(agrimet_et_df)
+        with col2:
+            crops=crops_df['crop_name'].to_list()
+            crops=set(crops)
+            crops=sorted(crops)
+            crop=st.selectbox('Select Crop',crops)
+            crop_df=crops_df[crops_df['crop_name']==crop]
+            if len(crop_df)>1:
+                start_dates=crop_df['start_date'].to_list()
+                start_dates=sorted(start_dates)
+                with col0:
+                    start_date=st.selectbox('Select ET Vegetation Start Date',start_dates)
+                    crop_df=crop_df[crop_df['start_date']==start_date]
+            else:
+                with col0:
+                    st.write()
+                    st.write('ET Vegetation Start Date')
+                    st.write(crop_df.iloc[0]['start_date'].strftime('%m/%d/%Y'))
+                    #st.write(crop_df.iloc[0]['dates'])
+        with col1:
+            et_df=pd.DataFrame({'Date':crop_df.iloc[0]['dates'],'ET (inches)':crop_df.iloc[0]['data']})
+            et_df.sort_values(by='Date',inplace=True)
+            start_et_date=et_df.iloc[0]['Date']
+            end_et_date=et_df.iloc[-1]['Date']
+            start_et=st.date_input('Start Date',value=start_et_date,min_value=start_et_date,max_value=end_et_date)
+            
+        with col2:
+            end_et=st.date_input('End Date',value=end_et_date,min_value=start_et,max_value=end_et_date)
+        
+        if start_et!=end_et:
+            et_df=et_df[(et_df['Date']>=start_et) & (et_df['Date']<=end_et)]
+            st.write(f'Total ET (inches) for the selected time period: {et_df["ET (inches)"].sum():0.2f}')
+            fig=px.line(et_df,x='Date',y='ET (inches)',
+                        markers=True,
+                        title=f'{station} - {crop}')
+            st.plotly_chart(fig)
+            st.write('Data Source: https://www.usbr.gov/pn/agrimet/')
+        
         
     elif choice=='Assign Crops':
         st.subheader('Assign Crops')
