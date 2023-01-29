@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import geopandas as gpd
 import numpy as np
 import datetime
 from dateutil.relativedelta import relativedelta
@@ -35,6 +36,7 @@ crops_file='gen_tables/crops_variety.csv'
 inputs_file='gen_tables/inputs.csv'
 fert_analysis_file='gen_tables/fert_analysis.txt'
 zone_data_file='zone_tables/zone_data_table.csv'
+zone_parquets_dir='zone_parquets/'
 
 ## helpful data management functions
 @st.cache(allow_output_mutation=True)
@@ -125,6 +127,16 @@ def get_gcp_csv(_g_client,bucket_name,file_path):
     return df
 
 @st.experimental_memo(ttl=3600)
+def get_gcp_geoparquet(_g_client,bucket_name,file_path):
+    file_url=get_signed_url(_g_client,bucket_name,file_path)
+    df=pd.read_parquet(file_url)
+    gs=gpd.GeoSeries.from_wkb(df['geometry'])
+    gdf=gpd.GeoDataFrame(df,geometry=gs,crs='EPSG:4326')
+    #st.write(type(gdf))
+    #gdf['geometry']=gdf['geometry'].from_wkb
+    return gdf
+
+@st.experimental_memo(ttl=3600)
 def get_gcp_text(_g_client,bucket_name,file_path):
     file_url=get_signed_url(_g_client,bucket_name,file_path)
     df=pd.read_table(file_url)
@@ -188,7 +200,7 @@ if authentication_status:
     elif main_choice=='VRT Tools':
         choice=st.sidebar.selectbox('VRT Tools',VRT_OPTIONS)
     elif main_choice=='Agrimet Dashboards':
-        choice=st.sidebar.selectbox('VRT Tools',AGRIMET_OPTIONS)
+        choice=st.sidebar.selectbox('Agrimet Tools',AGRIMET_OPTIONS)
     
     authenticator.logout('Logout','sidebar')
     
@@ -226,7 +238,7 @@ if authentication_status:
         
         start_date_prev=start_date-relativedelta(years=1)
         end_date_prev=end_date-relativedelta(years=1)
-        end_date_prev=end_date_prev-relativedelta(days=1)
+        #end_date_prev=end_date_prev-relativedelta(days=1)
         start_prev=tools.get_date_string(start_date_prev)
         end_prev=tools.get_date_string(end_date_prev)
         
@@ -729,7 +741,24 @@ if authentication_status:
                                    mime='application/zip')
         
         with col1:
-            st.image(img_file_url)            
+            zone_gdf=get_gcp_geoparquet(gcp_client,bucket_name,f'{zone_parquets_dir}{zone_id}.parquet')
+            zone_gdf['Acres']=zone_gdf['Acres'].round(decimals=1)
+            zone_gdf.set_index('Zone',inplace=True)
+            
+            gdf_fig=px.choropleth(zone_gdf,geojson=zone_gdf['geometry'],
+                                  locations=zone_gdf.index,
+                                  color=zone_gdf.index,
+                                  hover_data=[zone_gdf.index,zone_gdf['Acres']],
+                                  color_continuous_scale='Viridis',
+                                  projection='mercator',
+                                  template='plotly_dark',
+                                  width=1000,height=500)
+            gdf_fig.update_geos(fitbounds='geojson',visible=False)
+            gdf_fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0},
+                                  paper_bgcolor="rgba(0,0,0,0)")
+            gdf_fig.update_coloraxes(showscale=False)
+
+            st.plotly_chart(gdf_fig,use_container_width=True)
         
         file_path=f'zone_img_tables/{zone_id}.csv'
         if bucket.blob(file_path).exists():
