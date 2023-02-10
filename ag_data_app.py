@@ -391,35 +391,35 @@ if authentication_status:
         with col0:
             st.subheader('Enter Product Information')
             input_forms=inputs['form'].unique().tolist()
-            input_forms.insert(0,'<select>')
+            #input_forms.insert(0,'<select>')
             input_form=st.selectbox('Product Formulation',input_forms)
 
             inputs_sub_form=inputs[inputs['form']==input_form]
             input_types=inputs_sub_form['input_type'].unique()
             if input_form=='liquid':
-                LIQUID_UNITS.insert(0,'<select>')
+                #LIQUID_UNITS.insert(0,'<select>')
                 units=st.selectbox('Application Units',LIQUID_UNITS)
             elif input_form=='dry':
-                DRY_UNITS.insert(0,'<select>')
+                #DRY_UNITS.insert(0,'<select>')
                 units=st.selectbox('Application Units',DRY_UNITS)
 
             input_type=st.selectbox('Product Type',input_types)
             inputs_sub_type=inputs_sub_form[inputs_sub_form['input_type']==input_type]
             products=np.sort(inputs_sub_type['input'].unique()).tolist()
-            products.insert(0,'<select>')
+            #products.insert(0,'<select>')
             product=st.selectbox('Product',products)
             rate=st.number_input('Application Rate')
 
         with col1:
             st.subheader('Assign Fields')
             ai_clients=np.sort(fields['Client'].unique()).tolist()
-            years.insert(0,'<select>')
+            #years.insert(0,'<select>')
 
             ai_year=st.selectbox('Crop Year',years)
-            ai_clients.insert(0,'<select>')
+            #ai_clients.insert(0,'<select>')
             ai_client=st.selectbox('Client',ai_clients)
             ai_farms=np.sort(fields[fields['Client']==ai_client]['Farm'].unique()).tolist()
-            ai_farms.insert(0,'<select>')
+            #ai_farms.insert(0,'<select>')
             ai_farm=st.selectbox('Farm',ai_farms)
             ai_fields_sub=fields[fields['Client']==ai_client]
             ai_fields_sub=ai_fields_sub[ai_fields_sub['Farm']==ai_farm]
