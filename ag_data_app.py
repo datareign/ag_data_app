@@ -20,8 +20,8 @@ from st_aggrid import GridOptionsBuilder,AgGrid,GridUpdateMode,DataReturnMode
 st.set_page_config(layout="wide")
 import requests
 
-#env='prod'
-env='dev'
+env='prod'
+#env='dev'
 
 key_dict=json.loads(st.secrets['textkey'])
 creds=service_account.Credentials.from_service_account_info(key_dict)
