@@ -4,6 +4,23 @@ import requests
 import pandas as pd
 import io
 from variables import *
+import plotly.express as px
+
+##plotting functions
+def get_soil_data_bar_chart(soil_data,color_map,choice):
+    
+    bar_fig0=px.bar(soil_data,x='zone_int',
+                    y=choice,
+                    color='Zone',
+                    color_discrete_map=color_map,
+                    template='plotly_dark',
+                    labels={'zone_int':'Zone'},
+                    height=285)
+    bar_fig0.update_layout(margin={"r":10,"t":30,"l":35,"b":30},
+                           xaxis=dict(tickmode='linear'),
+                           showlegend=False)
+    return bar_fig0
+            
 
 def clear_text():
     st.session_state[0]=""

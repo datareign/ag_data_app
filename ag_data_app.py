@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import geopandas as gpd
 import numpy as np
+import matplotlib.pylab as pl
 import datetime
 from dateutil.relativedelta import relativedelta
 from google.cloud import firestore
@@ -37,6 +38,7 @@ inputs_file='gen_tables/inputs.csv'
 fert_analysis_file='gen_tables/fert_analysis.txt'
 zone_data_file='zone_tables/zone_data_table.csv'
 zone_parquets_dir='zone_parquets/'
+soil_data_dir='soil_lab_data/'
 
 ## helpful data management functions
 @st.cache(allow_output_mutation=True)
@@ -114,7 +116,6 @@ def get_document(_dbase,collection,uid):
 
 def get_signed_url(g_client,bucket_name, file_path,mins=1):
     bucket = g_client.bucket(bucket_name)
-    #content = bucket.blob(file_path).download_as_string().decode("utf-8")
     url = bucket.blob(file_path).generate_signed_url(version='v4',
                                                      expiration=datetime.timedelta(minutes=mins),
                                                      method='GET')
@@ -132,8 +133,6 @@ def get_gcp_geoparquet(_g_client,bucket_name,file_path):
     df=pd.read_parquet(file_url)
     gs=gpd.GeoSeries.from_wkb(df['geometry'])
     gdf=gpd.GeoDataFrame(df,geometry=gs,crs='EPSG:4326')
-    #st.write(type(gdf))
-    #gdf['geometry']=gdf['geometry'].from_wkb
     return gdf
 
 @st.experimental_memo(ttl=3600)
@@ -317,7 +316,6 @@ if authentication_status:
                     st.write()
                     st.write('ET Vegetation Start Date')
                     st.write(crop_df.iloc[0]['start_date'].strftime('%m/%d/%Y'))
-                    #st.write(crop_df.iloc[0]['dates'])
         with col1:
             et_df=pd.DataFrame({'Date':crop_df.iloc[0]['dates'],'ET (inches)':crop_df.iloc[0]['data']})
             et_df.sort_values(by='Date',inplace=True)
@@ -391,35 +389,28 @@ if authentication_status:
         with col0:
             st.subheader('Enter Product Information')
             input_forms=inputs['form'].unique().tolist()
-            #input_forms.insert(0,'<select>')
             input_form=st.selectbox('Product Formulation',input_forms)
 
             inputs_sub_form=inputs[inputs['form']==input_form]
             input_types=inputs_sub_form['input_type'].unique()
             if input_form=='liquid':
-                #LIQUID_UNITS.insert(0,'<select>')
                 units=st.selectbox('Application Units',LIQUID_UNITS)
             elif input_form=='dry':
-                #DRY_UNITS.insert(0,'<select>')
                 units=st.selectbox('Application Units',DRY_UNITS)
 
             input_type=st.selectbox('Product Type',input_types)
             inputs_sub_type=inputs_sub_form[inputs_sub_form['input_type']==input_type]
             products=np.sort(inputs_sub_type['input'].unique()).tolist()
-            #products.insert(0,'<select>')
             product=st.selectbox('Product',products)
             rate=st.number_input('Application Rate')
 
         with col1:
             st.subheader('Assign Fields')
             ai_clients=np.sort(fields['Client'].unique()).tolist()
-            #years.insert(0,'<select>')
 
             ai_year=st.selectbox('Crop Year',years)
-            #ai_clients.insert(0,'<select>')
             ai_client=st.selectbox('Client',ai_clients)
             ai_farms=np.sort(fields[fields['Client']==ai_client]['Farm'].unique()).tolist()
-            #ai_farms.insert(0,'<select>')
             ai_farm=st.selectbox('Farm',ai_farms)
             ai_fields_sub=fields[fields['Client']==ai_client]
             ai_fields_sub=ai_fields_sub[ai_fields_sub['Farm']==ai_farm]
@@ -691,7 +682,8 @@ if authentication_status:
     
     elif choice=='Zone Fertilizer Dashboard':
         st.subheader('Zone Fertilizer Dashboard')
-        col0,col1=st.columns([1,2])
+        col0,col_blank,col1,col2=st.columns([1,0.5,1,1])
+        soil_lab_data_flag=False
         with col0:
             vrt_clients=np.sort(zone_data_table['client'].unique())
             vrt_client=st.selectbox('Client',vrt_clients)
@@ -704,10 +696,14 @@ if authentication_status:
             vrt_fields_sub=vrt_fields_sub[vrt_fields_sub['field']==vrt_field]
             assert len(vrt_fields_sub)==1, 'There is a duplicate field name for this farm'
             zone_id=vrt_fields_sub.iloc[0]['zones_id']
+            lab_code=vrt_fields_sub.iloc[0]['lab_code']
             short_name=vrt_fields_sub.iloc[0]['name']
             img_file_url=get_signed_url(gcp_client,bucket_name,f'zone_images/{zone_id}.png')
             
             bucket=gcp_client.bucket(bucket_name)
+            
+        with col1:
+            st.write('Available PDF Downloads')
             file_path=f'zone_pdf_labels/{zone_id}.pdf'
             if bucket.blob(file_path).exists():
                 pdf_file=bucket.blob(file_path).download_as_bytes(raw_download=True)
@@ -718,6 +714,7 @@ if authentication_status:
             
             file_path=f'zone_pdf_samples/{zone_id}.pdf'
             if bucket.blob(file_path).exists():
+                soil_lab_data_flag=True
                 pdf_file=bucket.blob(file_path).download_as_bytes(raw_download=True)
                 st.download_button(label='Download Soil Data',
                                    data=pdf_file,
@@ -732,6 +729,8 @@ if authentication_status:
                                    file_name=f'{short_name}_prescription_load_sheet.pdf',
                                    mime='application/octet-stream')
             
+        with col2:
+            st.write('Available Prescription Downloads')
             file_path=f'zone_prescriptions/{zone_id}.zip'
             if bucket.blob(file_path).exists():
                 zip_file_bytes=bucket.blob(file_path).download_as_bytes(raw_download=True)
@@ -740,35 +739,125 @@ if authentication_status:
                                    file_name=f'{short_name}_prescription.zip',
                                    mime='application/zip')
         
-        with col1:
+        #with col1:
+        
+        col0,col1=st.columns([1,1])
+        with col0:
             zone_gdf=get_gcp_geoparquet(gcp_client,bucket_name,f'{zone_parquets_dir}{zone_id}.parquet')
+            zone_gdf['Zone']=zone_gdf['Zone'].astype(str)
             zone_gdf['Acres']=zone_gdf['Acres'].round(decimals=1)
-            zone_gdf.set_index('Zone',inplace=True)
+            zones=zone_gdf['Zone'].to_list()
+            colors=pl.cm.viridis(np.linspace(0,1,len(zones)))
+            color_map={}
+            i=0
+            for zone in zones:
+                color=colors[i]
+                color=color*255
+                color=color.astype(int)
+                color_map[zone]=f'rgb({color[0]},{color[1]},{color[2]})'
+                i+=1
             
             gdf_fig=px.choropleth(zone_gdf,geojson=zone_gdf['geometry'],
                                   locations=zone_gdf.index,
-                                  color=zone_gdf.index,
-                                  hover_data=[zone_gdf.index,zone_gdf['Acres']],
-                                  color_continuous_scale='Viridis',
-                                  projection='mercator',
-                                  template='plotly_dark',
-                                  width=1000,height=500)
-            gdf_fig.update_geos(fitbounds='geojson',visible=False)
+                                  color=zone_gdf['Zone'],
+                                  hover_data=[zone_gdf['Zone'],zone_gdf['Acres']],
+                                  color_discrete_map=color_map,
+                                  projection='natural earth',
+                                  template='plotly_dark')
+            gdf_fig.update_geos(fitbounds='geojson',visible=True)
             gdf_fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0},
-                                  paper_bgcolor="rgba(0,0,0,0)")
-            gdf_fig.update_coloraxes(showscale=False)
-
+                                  paper_bgcolor="rgba(0,0,0,0)",
+                                  legend=dict(y=0.8))
             st.plotly_chart(gdf_fig,use_container_width=True)
-        
+            
+            
         file_path=f'zone_img_tables/{zone_id}.csv'
         if bucket.blob(file_path).exists():
-            zone_img_data=get_gcp_csv(gcp_client,bucket_name,file_path)
-            zones=list(zone_img_data)
-            zone_img_data['dates']=pd.to_datetime(zone_img_data['dates'])
-            fig=px.line(zone_img_data,x='dates',y=zones,
-                        #color_discrete_sequence=px.colors.sequential.Viridis,
-                        markers=True,
-                        labels={'dates':'Dates','value':'Crop Vigor',
-                                'variable':'Zone'},
-                        title='Zone Crop Vigor Curves')
-            st.plotly_chart(fig)
+            with col1:
+                zone_img_data=get_gcp_csv(gcp_client,bucket_name,file_path)
+                zones=list(zone_img_data)
+                colors=pl.cm.viridis(np.linspace(0,1,len(zones)))
+                color_map={}
+                i=0
+                for zone in zones:
+                    color=colors[i]*255
+                    color=color.astype(int)
+                    color_map[zone]=f'rgb({color[0]},{color[1]},{color[2]})'
+                    i+=1
+                zone_img_data['dates']=pd.to_datetime(zone_img_data['dates'])
+                fig=px.line(zone_img_data,x='dates',y=zones,
+                            color_discrete_map=color_map,
+                            markers=True,
+                            labels={'dates':'Dates','value':'Crop Vigor',
+                                    'variable':'Zone'},
+                            title='Zone Crop Vigor Curves')
+                fig.update_layout(margin={"r":10,"t":50,"l":30,"b":10})
+                st.plotly_chart(fig)
+            
+        if soil_lab_data_flag:
+            try:
+
+                box_label=f'Soil Data Source: {SOIL_LAB_KEY[lab_code]}'
+                soil_data_choices=st.multiselect(box_label,LAB_DATA_COLS[lab_code],
+                                                 max_selections=4)
+
+                soil_data_path=f'{soil_data_dir}{zone_id}.csv'
+                soil_data=get_gcp_csv(gcp_client,bucket_name,soil_data_path)
+                soil_data.rename(columns=LAB_DATA_MAPS[lab_code],inplace=True)
+                soil_data.sort_values(by='Zone',inplace=True)
+                soil_data['zone_int']=soil_data['Zone'].astype(int)
+                soil_data['Zone']=soil_data['Zone'].astype(int).astype(str)
+                zones=soil_data['zone_int'].to_list()
+                colors=pl.cm.viridis(np.linspace(0,1,len(zones)))
+                color_map={}
+                i=0
+                for zone in zones:
+                    color=colors[i]*255
+                    color=color.astype(int)
+                    color_map[str(int(zone))]=f'rgb({color[0]},{color[1]},{color[2]})'
+                    i+=1
+
+                col0,col1,col2,col3=st.columns(4)
+                if len(soil_data_choices)==1:
+                    with col0:
+                        bar_fig0=tools.get_soil_data_bar_chart(soil_data,color_map,soil_data_choices[0])
+                        st.plotly_chart(bar_fig0,use_container_width=True)
+
+                if len(soil_data_choices)==2:
+                    with col0:  
+                        bar_fig0=tools.get_soil_data_bar_chart(soil_data,color_map,soil_data_choices[0])
+                        st.plotly_chart(bar_fig0,use_container_width=True)
+                    with col1:
+                        bar_fig1=tools.get_soil_data_bar_chart(soil_data,color_map,soil_data_choices[1])
+                        st.plotly_chart(bar_fig1,use_container_width=True)
+
+                if len(soil_data_choices)==3:
+                    with col0:
+                        bar_fig0=tools.get_soil_data_bar_chart(soil_data,color_map,soil_data_choices[0])
+                        st.plotly_chart(bar_fig0,use_container_width=True)
+                    with col1:
+                        bar_fig1=tools.get_soil_data_bar_chart(soil_data,color_map,soil_data_choices[1])
+                        st.plotly_chart(bar_fig1,use_container_width=True)
+                    with col2:
+                        bar_fig2=tools.get_soil_data_bar_chart(soil_data,color_map,soil_data_choices[2])
+                        st.plotly_chart(bar_fig2,use_container_width=True)
+
+                if len(soil_data_choices)==4:
+                    with col0:
+                        bar_fig0=tools.get_soil_data_bar_chart(soil_data,color_map,soil_data_choices[0])
+                        st.plotly_chart(bar_fig0,use_container_width=True)
+                    with col1:
+                        bar_fig1=tools.get_soil_data_bar_chart(soil_data,color_map,soil_data_choices[1])
+                        st.plotly_chart(bar_fig1,use_container_width=True)
+                    with col2:
+                        bar_fig2=tools.get_soil_data_bar_chart(soil_data,color_map,soil_data_choices[2])
+                        st.plotly_chart(bar_fig2,use_container_width=True)
+                    with col3:
+                        bar_fig3=tools.get_soil_data_bar_chart(soil_data,color_map,soil_data_choices[3])
+                        st.plotly_chart(bar_fig3,use_container_width=True)
+                        
+            except:
+                st.write('Soil data are not available')
+                
+            
+
