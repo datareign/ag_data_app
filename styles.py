@@ -23,3 +23,6 @@ NUTRIENT_STYLE={'Rate':'{:.2f}',
                 'Cu':'{:.1f}',
                 'Zn':'{:.1f}',
                 'Mo':'{:.1f}'}
+
+ZONE_STYLE={'Acres':'{:.1f}',
+            'Vigor':'{:.1f}'}

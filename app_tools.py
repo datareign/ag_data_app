@@ -5,6 +5,8 @@ import pandas as pd
 import io
 from variables import *
 import plotly.express as px
+import numpy as np
+from scipy import integrate
 
 ##plotting functions
 def get_soil_data_bar_chart(soil_data,color_map,choice):
@@ -15,7 +17,7 @@ def get_soil_data_bar_chart(soil_data,color_map,choice):
                     color_discrete_map=color_map,
                     template='plotly_dark',
                     labels={'zone_int':'Zone'},
-                    height=285)
+                    height=250)
     bar_fig0.update_layout(margin={"r":10,"t":30,"l":35,"b":30},
                            xaxis=dict(tickmode='linear'),
                            showlegend=False)
@@ -190,6 +192,22 @@ def get_et_data(df):
             i+=1
     crop_df.drop_duplicates(subset=['crop_code','start_date'],inplace=True)
     return crop_df
+
+def get_vigor_pos(gdf,img_df):
+    img_df['dates_1']=img_df['dates'].shift()
+    img_df['dates_diff']=img_df['dates']-img_df['dates_1']
+    img_df['dates_diff']=img_df['dates_diff'].dt.days
+    img_df['dates_diff']=img_df['dates_diff'].replace(np.nan,0.0)
+    img_df['date_sum']=img_df['dates_diff'].cumsum()
+    x=img_df['date_sum'].values
+    
+    gdf['total_vigor']=None
+    for index,row in gdf.iterrows():
+        y=img_df[str(row['Zone'])].values
+        auc=integrate.simpson(y,x)
+        gdf.loc[index,'total_vigor']=auc        
+    gdf['Vigor']=((gdf['total_vigor']-gdf['total_vigor'].mean())/gdf['total_vigor'].mean())*100
+    return gdf
 
     
     

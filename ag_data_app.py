@@ -741,58 +741,79 @@ if authentication_status:
         
         #with col1:
         
-        col0,col1=st.columns([1,1])
-        with col0:
-            zone_gdf=get_gcp_geoparquet(gcp_client,bucket_name,f'{zone_parquets_dir}{zone_id}.parquet')
-            zone_gdf['Zone']=zone_gdf['Zone'].astype(str)
-            zone_gdf['Acres']=zone_gdf['Acres'].round(decimals=1)
-            zones=zone_gdf['Zone'].to_list()
-            colors=pl.cm.viridis(np.linspace(0,1,len(zones)))
-            color_map={}
-            i=0
-            for zone in zones:
-                color=colors[i]
-                color=color*255
-                color=color.astype(int)
-                color_map[zone]=f'rgb({color[0]},{color[1]},{color[2]})'
-                i+=1
-            
-            gdf_fig=px.choropleth(zone_gdf,geojson=zone_gdf['geometry'],
-                                  locations=zone_gdf.index,
-                                  color=zone_gdf['Zone'],
-                                  hover_data=[zone_gdf['Zone'],zone_gdf['Acres']],
-                                  color_discrete_map=color_map,
-                                  projection='natural earth',
-                                  template='plotly_dark')
-            gdf_fig.update_geos(fitbounds='geojson',visible=True)
-            gdf_fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0},
-                                  paper_bgcolor="rgba(0,0,0,0)",
-                                  legend=dict(y=0.8))
-            st.plotly_chart(gdf_fig,use_container_width=True)
-            
-            
-        file_path=f'zone_img_tables/{zone_id}.csv'
-        if bucket.blob(file_path).exists():
-            with col1:
-                zone_img_data=get_gcp_csv(gcp_client,bucket_name,file_path)
-                zones=list(zone_img_data)
+        col0,col1,col2=st.columns([0.75,0.2,0.75])
+        geo_file_path=f'{zone_parquets_dir}{zone_id}.parquet'
+        if bucket.blob(geo_file_path).exists():
+            with col0:
+                zone_gdf=get_gcp_geoparquet(gcp_client,bucket_name,geo_file_path)
+                zone_gdf['Zone']=zone_gdf['Zone'].astype(str)
+                zone_gdf['Acres']=zone_gdf['Acres'].round(decimals=1)
+                zone_gdf_1=zone_gdf.copy()
+                zones=zone_gdf['Zone'].to_list()
+                zone_gdf.set_index('Zone',inplace=True)
                 colors=pl.cm.viridis(np.linspace(0,1,len(zones)))
                 color_map={}
                 i=0
                 for zone in zones:
-                    color=colors[i]*255
+                    color=colors[i]
+                    color=color*255
                     color=color.astype(int)
                     color_map[zone]=f'rgb({color[0]},{color[1]},{color[2]})'
                     i+=1
-                zone_img_data['dates']=pd.to_datetime(zone_img_data['dates'])
-                fig=px.line(zone_img_data,x='dates',y=zones,
-                            color_discrete_map=color_map,
-                            markers=True,
-                            labels={'dates':'Dates','value':'Crop Vigor',
-                                    'variable':'Zone'},
-                            title='Zone Crop Vigor Curves')
-                fig.update_layout(margin={"r":10,"t":50,"l":30,"b":10})
-                st.plotly_chart(fig)
+
+                gdf_fig=px.choropleth(zone_gdf,geojson=zone_gdf['geometry'],
+                                      locations=zone_gdf.index,
+                                      color=zone_gdf.index,
+                                      hover_data=[zone_gdf['Acres']],
+                                      color_discrete_map=color_map,
+                                      projection='natural earth',
+                                      template='plotly_dark')
+                gdf_fig.update_geos(fitbounds='geojson',visible=True)
+
+                gdf_fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0},
+                                      paper_bgcolor="rgba(0,0,0,0)",
+                                      legend=dict(y=0.85))
+                st.plotly_chart(gdf_fig,use_container_width=True)
+            
+            file_path=f'zone_img_tables/{zone_id}.csv'
+            if bucket.blob(file_path).exists():
+                with col1:
+                    zone_img_data=get_gcp_csv(gcp_client,bucket_name,file_path)
+                    zone_img_data['dates']=pd.to_datetime(zone_img_data['dates'])
+                    zone_img_data.sort_values(by='dates',inplace=True)
+                    zone_img_data_1=zone_img_data.copy()
+                    zone_gdf=tools.get_vigor_pos(zone_gdf_1,zone_img_data_1)
+                    vigor_df=zone_gdf[['Zone','Acres','Vigor']]
+                    vigor_df.set_index('Zone',inplace=True)
+                    vigor_df['Vigor']=vigor_df['Vigor'].astype(float)
+                    vigor_df['Vigor']=vigor_df['Vigor'].round(decimals=1)
+                    #st.write(vigor_df)
+                    st.dataframe(vigor_df.style.format(ZONE_STYLE),use_container_width=False)
+                
+            
+        #file_path=f'zone_img_tables/{zone_id}.csv'
+        #if bucket.blob(file_path).exists():
+                with col2:
+                    #zone_img_data=get_gcp_csv(gcp_client,bucket_name,file_path)
+                    zones=list(zone_img_data)
+                    colors=pl.cm.viridis(np.linspace(0,1,len(zones)))
+                    color_map={}
+                    i=0
+                    for zone in zones:
+                        color=colors[i]*255
+                        color=color.astype(int)
+                        color_map[zone]=f'rgb({color[0]},{color[1]},{color[2]})'
+                        i+=1
+                    #zone_img_data['dates']=pd.to_datetime(zone_img_data['dates'])
+                    fig=px.line(zone_img_data,x='dates',y=zones,
+                                color_discrete_map=color_map,
+                                markers=True,
+                                labels={'dates':'Date','value':'Zone Crop Vigor',
+                                        'variable':'Zone'},
+                                title='Zone Crop Vigor Curves')
+                                
+                    fig.update_layout(margin={"r":10,"t":50,"l":30,"b":10})
+                    st.plotly_chart(fig)
             
         if soil_lab_data_flag:
             try:
