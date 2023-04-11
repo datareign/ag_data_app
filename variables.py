@@ -111,7 +111,8 @@ AGRIMET_CROP_CODES={'ETr':'REFERENCE EVAPOTRANSPIRATION (KIMBERLY-PENMAN ALFALFA
                     'WGRP':'WINE GRAPE'}
                   
 SOIL_LAB_KEY={'tx_am':'Texas A&M AgriLife Extension',
-              'next_level':'Next Level Ag, LLC'}
+              'next_level':'Next Level Ag, LLC',
+              'midwest':'Midwest Laboratories'}
 
 LAB_DATA_COLS={'tx_am':['pH',
                         'Conductivity (umho/cm)',
@@ -128,7 +129,17 @@ LAB_DATA_COLS={'tx_am':['pH',
                              'Ca (ppm)','Mg (ppm)', 
                              'Zn (ppm)','Mn (ppm)', 
                              'Fe (ppm)','Cu (ppm)', 
-                             'B (ppm)','Na (ppm)']}
+                             'B (ppm)','Na (ppm)'],
+               'midwest':['OM (%)','P1 (ppm)',
+                          'P2 (ppm)','K (ppm)',
+                          'Mg (ppm)','Ca (ppm)',
+                          'Na (ppm)','pH',
+                          'CEC (meq/100g)','%K',
+                          '%Mg','%Ca','%H','%Na',
+                          'NO3 (ppm)','S (ppm)',
+                          'Zn (ppm)','Mn (ppm)',
+                          'Fe (ppm)','Cu (ppm)',
+                          'B (ppm)','Soluble Salts (mmhos/cm)']}
 
 LAB_DATA_MAPS={'tx_am':{'Sample ID':'Zone',
                         'Cond':'Conductivity (umho/cm)',
@@ -157,4 +168,27 @@ LAB_DATA_MAPS={'tx_am':{'Sample ID':'Zone',
                              'S lbs':'S (lbs)',
                              'Na':'Na (ppm)',
                              'Cl':'Cl (ppm)',
-                             'CEC':'CEC (meq/100g)'}}
+                             'CEC':'CEC (meq/100g)'},
+               'midwest':{'SAMPLE ID':'Zone',
+                          'OM':'OM (%)',
+                          'P1':'P1 (ppm)',
+                          'P2':'P2 (ppm)',
+                          'K':'K (ppm)',
+                          'MG':'Mg (ppm)',
+                          'CA':'Ca (ppm)',
+                          'NA':'Na (ppm)',
+                          'PH':'pH',
+                          'CEC':'CEC (meq/100g)',
+                          'PERCENT K':'%K',
+                          'PERCENT MG':'%Mg',
+                          'PERCENT CA':'%Ca',
+                          'PERCENT H':'%H',
+                          'PERCENT NA':'%Na',
+                          'NO3':'NO3 (ppm)',
+                          'S':'S (ppm)',
+                          'ZN':'Zn (ppm)',
+                          'MN':'Mn (ppm)',
+                          'FE':'Fe (ppm)',
+                          'CU':'Cu (ppm)',
+                          'B':'B (ppm)',
+                          'SOL SALTS':'Soluble Salts (mmhos/cm)'}}
