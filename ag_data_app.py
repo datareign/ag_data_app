@@ -349,7 +349,7 @@ if authentication_status:
                 zone_data_table=zone_data_table[zone_data_table['archive']=='x']
             else:
                 zone_data_table=zone_data_table[zone_data_table['archive']!='x']
-                
+            st.write(zone_data_table)
             vrt_clients=np.sort(zone_data_table['client'].unique())
             vrt_client=st.selectbox('Client',vrt_clients)
             vrt_farms=np.sort(zone_data_table[zone_data_table['client']==vrt_client]['farm'].unique())
@@ -359,7 +359,7 @@ if authentication_status:
             vrt_fields_list=np.sort(vrt_fields_sub['field'].unique())
             vrt_field=st.selectbox('Field',vrt_fields_list)
             vrt_fields_sub=vrt_fields_sub[vrt_fields_sub['field']==vrt_field]
-            assert len(vrt_fields_sub)==1, 'There is a duplicate field name for this farm'
+            assert len(vrt_fields_sub)==1, 'There is a problem with the field list'
             zone_id=vrt_fields_sub.iloc[0]['zones_id']
             lab_code=vrt_fields_sub.iloc[0]['lab_code']
             short_name=vrt_fields_sub.iloc[0]['name']
