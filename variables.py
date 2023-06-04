@@ -1,14 +1,11 @@
+import folium
+
 
 WELCOME='''Welcome to the ProGro Data Management System.
-         This interface is designed to allow users to develop 
-         detailed crop plans including planned field assignments, 
-         varieties/hybrids, and inputs. To make this process
-         as efficient as possible, almost all entries are
-         restricted to drop-down selection boxes.
+         This interface is designed to allow users to interact
+         with VRT and Agrimet climate data.
          This application is connected to a secure and 
-         private cloud database. You also have the option 
-         to download your data to maintain your own copies and 
-         use as you wish. If you have any questions or need
+         private cloud database. If you have any questions or need
          additional input options for products, crop types, and/or
          varieties, please use the link below to contact the 
          site administrator. Be sure to include detailed
@@ -16,8 +13,6 @@ WELCOME='''Welcome to the ProGro Data Management System.
 
 MAIN_MENU=['Welcome',
            'Agrimet Dashboards',
-           'Planning Tools',
-           'Application Tools',
            'VRT Tools']
 PLANNING_OPTIONS=['Assign Crops',
                   'Assign Inputs',
@@ -30,6 +25,20 @@ APPLICATION_OPTIONS=['Log Input Application',
 VRT_OPTIONS=['Zone Fertilizer Dashboard']
 AGRIMET_OPTIONS=['Agrimet Daily Weather',
                  'Agrimet Daily Crop ET']
+
+BASEMAPS={'Google Satellite Hybrid':folium.TileLayer(
+        tiles = 'http://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}',
+        attr = 'Google',
+        name = 'Google Satellite',
+        overlay = True,
+        control = True),
+        'ESRI':folium.TileLayer(
+        tiles = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        attr = 'Esri',
+        name = 'Esri Satellite',
+        overlay = False,
+        control = True
+       )}
 
 NUTRIENTS=['N','P','K','S','Mg','Ca','B','Cl','Mn','Fe','Cu','Zn','Mo']
 

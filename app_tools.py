@@ -184,12 +184,13 @@ def get_et_data(df):
     for col in df.columns:
         if (col!='DATE') and (col!='ETr'):
             df1=df[df[col]!='--']
-            crop_df.loc[i,'crop_code']=col[:4]
-            crop_df.loc[i,'crop_name']=AGRIMET_CROP_CODES[col[:4]]
-            crop_df.loc[i,'start_date']=df1.iloc[0]['DATE']
-            crop_df.at[i,'dates']=df1['DATE'].to_list()
-            crop_df.at[i,'data']=df1[col].astype(float).to_list()
-            i+=1
+            if len(df1)>1:
+                crop_df.loc[i,'crop_code']=col[:4]
+                crop_df.loc[i,'crop_name']=AGRIMET_CROP_CODES[col[:4]]
+                crop_df.loc[i,'start_date']=df1.iloc[0]['DATE']
+                crop_df.at[i,'dates']=df1['DATE'].to_list()
+                crop_df.at[i,'data']=df1[col].astype(float).to_list()
+                i+=1
     crop_df.drop_duplicates(subset=['crop_code','start_date'],inplace=True)
     return crop_df
 

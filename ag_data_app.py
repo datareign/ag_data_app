@@ -20,6 +20,9 @@ import plotly.express as px
 from st_aggrid import GridOptionsBuilder,AgGrid,GridUpdateMode,DataReturnMode
 st.set_page_config(layout="wide")
 import requests
+import folium
+from streamlit_folium import st_folium
+import streamlit_toggle as tog
 
 env='prod'
 #env='dev'
@@ -149,7 +152,7 @@ hide_streamlit_style="""
             """
 st.markdown(hide_streamlit_style,unsafe_allow_html=True)
 
-set_png_as_page_bg('data/background3.jpg')
+#set_png_as_page_bg('data/background3.jpg')
 
 users=get_data(db,'users')
 names=users['user'].to_list()
@@ -170,16 +173,16 @@ if authentication_status==False:
 if authentication_status==None:
     st.warning('Please enter your username and password.')
 if authentication_status:
-    years=YEARS
-    fields=get_gcp_csv(gcp_client,bucket_name,field_file)
-    crops_variety=get_gcp_csv(gcp_client,bucket_name,crops_file)
-    inputs=get_gcp_csv(gcp_client,bucket_name,inputs_file)
-    fert_analysis=get_gcp_text(gcp_client,bucket_name,fert_analysis_file)
+    #years=YEARS
+    #fields=get_gcp_csv(gcp_client,bucket_name,field_file)
+    #crops_variety=get_gcp_csv(gcp_client,bucket_name,crops_file)
+    #inputs=get_gcp_csv(gcp_client,bucket_name,inputs_file)
+    #fert_analysis=get_gcp_text(gcp_client,bucket_name,fert_analysis_file)
     zone_data_table=get_gcp_csv(gcp_client,bucket_name,zone_data_file)
     zone_data_table=zone_data_table[zone_data_table['active']=='yes']
     
     if username!='mgriffel':
-        fields=fields[fields['user_name']==username]
+        #fields=fields[fields['user_name']==username]
         zone_data_table=zone_data_table[zone_data_table['user_name']==username]
     elif username=='mgriffel':
         if st.sidebar.button('Clear All Cache'):
@@ -192,10 +195,10 @@ if authentication_status:
     main_choice=st.sidebar.selectbox('Site Navigation Options',MAIN_MENU)
     if main_choice=='Welcome':
         choice='Welcome'
-    elif main_choice=='Planning Tools':
-        choice=st.sidebar.selectbox('Planning Tools',PLANNING_OPTIONS)
-    elif main_choice=='Application Tools':
-        choice=st.sidebar.selectbox('Application Tools',APPLICATION_OPTIONS)
+    #elif main_choice=='Planning Tools':
+    #    choice=st.sidebar.selectbox('Planning Tools',PLANNING_OPTIONS)
+    #elif main_choice=='Application Tools':
+    #    choice=st.sidebar.selectbox('Application Tools',APPLICATION_OPTIONS)
     elif main_choice=='VRT Tools':
         choice=st.sidebar.selectbox('VRT Tools',VRT_OPTIONS)
     elif main_choice=='Agrimet Dashboards':
@@ -213,8 +216,8 @@ if authentication_status:
         params=sorted(params)
         stations=list(AGRIMET_STATIONS)
         stations=sorted(stations)
-        now=datetime.datetime.utcnow()
-        now_minus_1=datetime.datetime.utcnow()-relativedelta(days=1)
+        now=datetime.datetime.utcnow()-relativedelta(days=1)
+        now_minus_1=datetime.datetime.utcnow()-relativedelta(days=7)
         
         col0,col1,col2,col3=st.columns(4)
         with col0:
@@ -227,7 +230,7 @@ if authentication_status:
             start_date=st.date_input('Start Date',value=now_minus_1,max_value=now_minus_1)
             start=tools.get_date_string(start_date)
         with col3:
-            end_date=st.date_input('End Date',min_value=start_date,max_value=now)
+            end_date=st.date_input('End Date',value=now,min_value=start_date,max_value=now)
             end=tools.get_date_string(end_date)
         
         agrimet_address=tools.get_agrimet_daily_address(station_id,param_id,start,end)
@@ -333,358 +336,20 @@ if authentication_status:
                         markers=True,
                         title=f'{station} - {crop}')
             st.plotly_chart(fig)
-            st.write('Data Source: https://www.usbr.gov/pn/agrimet/')
-        
-        
-    elif choice=='Assign Crops':
-        st.subheader('Assign Crops')
-        now=datetime.datetime.utcnow()
-        ac_clients=np.sort(fields['Client'].unique())
-        ac_crops=np.sort(crops_variety['crop'].unique())
-
-        col0,col1=st.columns(2)
-        with col0:
-            ac_crop=st.selectbox('Crop',ac_crops,0)
-            ac_varieties=np.sort(crops_variety[crops_variety['crop']==ac_crop]['variety'].unique())
-            ac_variety=st.selectbox('Variety',ac_varieties)    
-            ac_year=st.selectbox('Crop Year',years)
-            ac_client=st.selectbox('Client',ac_clients)
-
-        with col1:            
-            ac_farms=np.sort(fields[fields['Client']==ac_client]['Farm'].unique())
-            ac_farm=st.selectbox('Farm',ac_farms)
-            ac_fields_sub=fields[fields['Client']==ac_client]
-            ac_fields_sub=ac_fields_sub[ac_fields_sub['Farm']==ac_farm]
-            ac_fields_list=np.sort(ac_fields_sub['Field'].unique())
-            ac_fields_list=st.multiselect('Fields',ac_fields_list)
-            ac_notes=st.text_area('Notes')
-
-            if st.button('SUBMIT'):
-                for field in ac_fields_list:
-                    field_row=ac_fields_sub[ac_fields_sub['Field']==field]
-                    assert len(field_row)==1, 'There is a duplicate field name for this farm'
-                    unq_fldid=field_row.iloc[0]['unq_fldid']
-                    acres=field_row.iloc[0]['acres']
-                    uid=str(uuid.uuid4())
-                    doc_ref=db.collection(f'crop_assignments_{env}').document(f'{uid}')
-                    doc_ref.set({'log_datetime':now,
-                                 'uuid':uid,
-                                 'unq_fldid':int(unq_fldid),
-                                 'crop_year':int(ac_year),
-                                 'client':ac_client,
-                                 'farm':ac_farm,
-                                 'field':field,
-                                 'acres':float(acres),
-                                 'crop':ac_crop,
-                                 'variety':ac_variety,
-                                 'notes':ac_notes,
-                                 'user_name':username})
-                st.success('You have successfully submitted your data.')
-
-    elif choice=='Assign Inputs':
-        st.subheader('Assign Inputs')
-        now=datetime.datetime.utcnow()
-        col0,col1=st.columns(2)
-
-        with col0:
-            st.subheader('Enter Product Information')
-            input_forms=inputs['form'].unique().tolist()
-            input_form=st.selectbox('Product Formulation',input_forms)
-
-            inputs_sub_form=inputs[inputs['form']==input_form]
-            input_types=inputs_sub_form['input_type'].unique()
-            if input_form=='liquid':
-                units=st.selectbox('Application Units',LIQUID_UNITS)
-            elif input_form=='dry':
-                units=st.selectbox('Application Units',DRY_UNITS)
-
-            input_type=st.selectbox('Product Type',input_types)
-            inputs_sub_type=inputs_sub_form[inputs_sub_form['input_type']==input_type]
-            products=np.sort(inputs_sub_type['input'].unique()).tolist()
-            product=st.selectbox('Product',products)
-            rate=st.number_input('Application Rate')
-
-        with col1:
-            st.subheader('Assign Fields')
-            ai_clients=np.sort(fields['Client'].unique()).tolist()
-
-            ai_year=st.selectbox('Crop Year',years)
-            ai_client=st.selectbox('Client',ai_clients)
-            ai_farms=np.sort(fields[fields['Client']==ai_client]['Farm'].unique()).tolist()
-            ai_farm=st.selectbox('Farm',ai_farms)
-            ai_fields_sub=fields[fields['Client']==ai_client]
-            ai_fields_sub=ai_fields_sub[ai_fields_sub['Farm']==ai_farm]
-            ai_fields_list=np.sort(ai_fields_sub['Field'].unique())
-            ai_fields_list=st.multiselect('Fields',ai_fields_list)
-            ai_notes=st.text_area('Notes')
-
-            if st.button('SUBMIT'):
-                for field in ai_fields_list:
-                    field_row=ai_fields_sub[ai_fields_sub['Field']==field]
-                    assert len(field_row)==1, 'There is a duplicate field name for this farm'
-                    unq_fldid=field_row.iloc[0]['unq_fldid']
-                    acres=field_row.iloc[0]['acres']
-                    uid=str(uuid.uuid4())
-                    doc_ref=db.collection(f'crop_inputs_{env}').document(f'{uid}')
-                    doc_ref.set({'log_datetime':now,
-                                 'uuid':uid,
-                                 'unq_fldid':int(unq_fldid),
-                                 'crop_year':int(ai_year),
-                                 'client':ai_client,
-                                 'farm':ai_farm,
-                                 'field':field,
-                                 'acres':float(acres),
-                                 'product':product,
-                                 'type':input_type,
-                                 'formulation':input_form,
-                                 'rate':float(rate),
-                                 'units':units,
-                                 'notes':ai_notes,
-                                 'user_name':username})
-                st.success('You have successfully submitted your data.')
-
-    elif choice=='View Crop Plan':
-        st.subheader('View Crop Plan Assignments')
-        st.write('Select by crop year and grower.')
-        col0,col1=st.columns(2)
-        with col0:
-            ca_year=st.selectbox('Crop Year',years)
-            ca_clients=np.sort(fields['Client'].unique())
-        with col1:
-            ca_client=st.selectbox('Client',ca_clients)
-                
-        ca_df=get_data_query(db,f'crop_assignments_{env}',ca_year,ca_client)
-        if ca_df is not None:
-            st.write(f'There are {len(ca_df)} records in the table below.')
-            ca_df['crop_year']=ca_df['crop_year'].astype(int)
-            ca_df.sort_values(by=['farm','field','crop'],inplace=True)
-            ca_df.reset_index(drop=True,inplace=True)
-            ca_df=ca_df[['client','farm','field','crop_year',
-                         'acres','crop','variety','notes']]
-            
-            with st.expander('Results Table'):
-                st.dataframe(ca_df.style.format(CROP_STYLE))
-                
-            csv=ca_df.to_csv().encode('utf-8')
-            if st.download_button(label='Download Planned Crop Data',data=csv,
-                                  file_name='Crop_Assignments_Plan.csv',
-                                  mime='text/csv'):
-                st.success('Your dataset has downloaded.')
-            
-            crop_df=tools.get_crop_summaries(ca_df,ca_client,ca_year)            
-                                
-            with st.expander('Crop Summary Table'):
-                st.dataframe(crop_df.style.format(CROP_STYLE))
-                            
-            crop_csv=crop_df.to_csv().encode('utf-8')
-            if st.download_button(label='Download Planned Crop Summary Data',data=crop_csv,
-                                  file_name=f'Crop_Summary_Plan_{ca_client}_{ca_year}.csv',
-                                  mime='text/csv'):
-                st.success('Your crop summaries have downloaded.')
-        else:
-            st.write('There are no planned crop assignements in the system for this year and client.')
-
-    elif choice=='View Input Plan':
-        st.subheader('View Input Plan Assignments')
-        st.write('Select by crop year and grower.')
-        col0,col1=st.columns(2)    
-        with col0:
-            i_year=st.selectbox('Crop Year',years)
-            i_clients=np.sort(fields['Client'].unique())
-        with col1:
-            i_client=st.selectbox('Client',i_clients)
-
-        i_df=get_data_query(db,f'crop_inputs_{env}',i_year,i_client)
-        if i_df is not None:
-            st.write(f'There are {len(i_df)} records in the table below.')
-            i_df['crop_year']=i_df['crop_year'].astype(int)
-            i_df.sort_values(by=['farm','field'],inplace=True)
-            i_df.reset_index(drop=True,inplace=True)
-            i_df=i_df[['client','farm','field','crop_year','acres',
-                       'product','type','formulation','rate','units',
-                       'notes']]
-            with st.expander('Results Table'):
-                st.dataframe(i_df.style.format(INPUT_STYLE))
-                
-            csv=i_df.to_csv().encode('utf-8')
-            if st.download_button(label='Download Planned Input Data',data=csv,
-                                  file_name=f'Input_Assignments_Plan_{i_client}_{i_year}.csv',
-                                  mime='text/csv'):
-                st.success('Your input dataset has downloaded.')
-                
-            ##This builds the product summary table
-            prod_df=tools.get_prod_summaries(i_df,i_client,i_year)            
-                                
-            with st.expander('Product Summary Table'):
-                st.dataframe(prod_df.style.format(PROD_STYLE))
-                            
-            prod_csv=prod_df.to_csv().encode('utf-8')
-            if st.download_button(label='Download Planned Product Summary Data',data=prod_csv,
-                                  file_name=f'Product_Summary_Plan_{i_client}_{i_year}.csv',
-                                  mime='text/csv'):
-                st.success('Your product summaries have downloaded.')
-        else:
-            st.write('There are no planned inputs for this year and client')
-            
-    elif choice=='Delete Assignment':
-        input_types=inputs['input_type'].unique()
-        
-        st.subheader('Delete Planned Crop or Input Assignments')
-        
-        assignment=st.selectbox('Crop or Input',['Crop','Input'])
-        if assignment=='Input':
-            st.write('Select by crop year and field.')
-            col0,col1=st.columns(2)    
-            with col0:
-                e_year=st.selectbox('Crop Year',years)
-                e_type=st.selectbox('Input Type',input_types)
-                e_clients=np.sort(fields['Client'].unique())
-            with col1:
-                e_client=st.selectbox('Client',e_clients)
-                e_farms=np.sort(fields[fields['Client']==e_client]['Farm'].unique())
-                e_farm=st.selectbox('Farm',e_farms)
-                e_fields_sub=fields[fields['Client']==e_client]
-                e_fields_sub=e_fields_sub[e_fields_sub['Farm']==e_farm]
-                e_fields_list=np.sort(e_fields_sub['Field'].unique())
-                e_field=st.selectbox('Field',e_fields_list)
-
-            e_df=get_data_query_field(db,f'crop_inputs_{env}',e_year,e_client,e_farm,e_field,e_type)
-            if e_df is not None:
-                st.write(f'There are {len(e_df)} records in the table below.')
-                e_df['crop_year']=e_df['crop_year'].astype(int)
-                e_df.sort_values(by='product',inplace=True)
-                e_df.reset_index(drop=True,inplace=True)
-                e_df=e_df[['client','farm','field','crop_year','acres',
-                           'product','type','formulation','rate','units',
-                           'uuid','notes']]
-                gb=GridOptionsBuilder.from_dataframe(e_df)
-                gb.configure_pagination(paginationAutoPageSize=True) #Add pagination
-                #gb.configure_side_bar() #Add a sidebar
-                gb.configure_selection('multiple',use_checkbox=True)
-                gb.configure_column('acres',type=['numericColumn','numberColumnFilter','customNumericFormat'],
-                                    precision=1)
-                grid_options=gb.build()
-                grid_response=AgGrid(e_df,
-                                     gridOptions=grid_options,
-                                     data_return_mode='AS_INPUT', 
-                                     update_mode='MODEL_CHANGED', 
-                                     fit_columns_on_grid_load=False,
-                                     theme='alpine',
-                                     enable_enterprise_modules=True,
-                                     height=550, 
-                                     width='100%',
-                                     reload_data=False)
-                selected=grid_response['selected_rows']
-                if len(selected)>0:
-                    if st.button('Click to Delete'):
-                        for row in selected:
-                            uid=row['uuid']
-                            db.collection(f'crop_inputs_{env}').document(uid).delete()
-                        st.success('The data have been deleted.')
-                        st.experimental_rerun()
-            else:
-                st.write('There are no planned inputs for this year, field, and type.')
-                    
-        elif assignment=='Crop':
-            st.write('Select by crop year, grower, and farm.')
-            col0,col1=st.columns(2)    
-            with col0:
-                d_year=st.selectbox('Crop Year',years)
-                d_clients=np.sort(fields['Client'].unique())
-            with col1:
-                d_client=st.selectbox('Client',d_clients)
-                d_farms=np.sort(fields[fields['Client']==d_client]['Farm'].unique())
-                d_farm=st.selectbox('Farm',d_farms)
-
-            d_df=get_data_query_farm(db,f'crop_assignments_{env}',d_year,d_client,d_farm)
-            if d_df is not None:
-                st.write(f'There are {len(d_df)} records in the table below.')
-                d_df['crop_year']=d_df['crop_year'].astype(int)
-                d_df.sort_values(by=['farm','field','crop'],inplace=True)
-                d_df.reset_index(drop=True,inplace=True)
-                d_df=d_df[['client','farm','field','crop_year','acres',
-                           'crop','variety','uuid','notes']]
-                gb=GridOptionsBuilder.from_dataframe(d_df)
-                gb.configure_pagination(paginationAutoPageSize=True) #Add pagination
-                #gb.configure_side_bar() #Add a sidebar
-                gb.configure_selection('multiple',use_checkbox=True)
-                gb.configure_column('acres',type=['numericColumn','numberColumnFilter','customNumericFormat'],
-                                    precision=1)
-                grid_options=gb.build()
-                grid_response=AgGrid(d_df,
-                                     gridOptions=grid_options,
-                                     data_return_mode='AS_INPUT', 
-                                     update_mode='MODEL_CHANGED', 
-                                     fit_columns_on_grid_load=False,
-                                     theme='alpine',
-                                     enable_enterprise_modules=True,
-                                     height=550, 
-                                     width='100%',
-                                     reload_data=False)
-                selected=grid_response['selected_rows']
-                if len(selected)>0:
-                    if st.button('Click to Delete'):
-                        for row in selected:
-                            uid=row['uuid']
-                            db.collection(f'crop_assignments_{env}').document(uid).delete()
-                        st.success('The data have been deleted.')
-                        st.experimental_rerun()
-            else:
-                st.write('There are no planned crops for this year and field.')
-
-    elif choice=='View Nutrient Plan':
-        st.subheader('View Planned Nutrients')
-        col0,col1=st.columns(2)
-        with col0:
-            vn_year=st.selectbox('Crop Year',years)
-            vn_clients=np.sort(fields['Client'].unique())
-            vn_client=st.selectbox('Client',vn_clients)
-        with col1:
-            vn_farms=np.sort(fields[fields['Client']==vn_client]['Farm'].unique())
-            vn_farm=st.selectbox('Farm',vn_farms)
-            vn_fields_sub=fields[fields['Client']==vn_client]
-            vn_fields_sub=vn_fields_sub[vn_fields_sub['Farm']==vn_farm]
-            vn_fields_list=np.sort(vn_fields_sub['Field'].unique())
-            vn_field=st.selectbox('Field',vn_fields_list)
-
-        n_df=get_data_query_field(db,f'crop_inputs_{env}',vn_year,vn_client,vn_farm,vn_field,'fertilizer')
-
-        if n_df is not None:
-            n_df['crop_year']=n_df['crop_year'].astype(int)
-            nutrient_dfs=[]
-            for index,row in n_df.iterrows():
-                nutrient_dfs.append(tools.add_nutrients(fert_analysis,
-                                                        row['product'],
-                                                        row['rate'],
-                                                        row['units'],
-                                                        int(vn_year)))
-            nutrient_df=pd.concat(nutrient_dfs)
-            nutrient_df['Crop Year']=nutrient_df['Crop Year'].astype(int)
-            nutrient_df.reset_index(drop=True,inplace=True)
-
-            if len(nutrient_df)>1:
-                nutrient_df.loc[len(nutrient_df),NUTRIENTS]=nutrient_df.sum(axis=0)
-                nutrient_df.loc[len(nutrient_df)-1,'Product']='Totals'                
-                st.write(f'There are {len(nutrient_df)-1} records in the table below.')
-            else:
-                st.write(f'There are {len(nutrient_df)} records in the table below.')
-                
-            with st.expander('Results Table'):
-                st.dataframe(nutrient_df.style.format(NUTRIENT_STYLE))
-            csv=nutrient_df.to_csv().encode('utf-8')
-            if st.download_button(label='Download Data',data=csv,
-                                  file_name='Applied_Nutrients.csv',
-                                  mime='text/csv'):
-                st.success('Your dataset has downloaded.')     
-        else:
-            st.write('There are no planned fertilizer records for this year and field')
-
+            st.write('Data Source: https://www.usbr.gov/pn/agrimet/')        
     
     elif choice=='Zone Fertilizer Dashboard':
         st.subheader('Zone Fertilizer Dashboard')
         col0,col_blank,col1,col2=st.columns([1,0.5,1,1])
         soil_lab_data_flag=False
+        
         with col0:
+            toggle_response=tog.st_toggle_switch(label='View Archive Data')
+            if toggle_response:
+                zone_data_table=zone_data_table[zone_data_table['archive']=='x']
+            else:
+                zone_data_table=zone_data_table[zone_data_table['archive']!='x']
+                
             vrt_clients=np.sort(zone_data_table['client'].unique())
             vrt_client=st.selectbox('Client',vrt_clients)
             vrt_farms=np.sort(zone_data_table[zone_data_table['client']==vrt_client]['farm'].unique())
