@@ -350,7 +350,7 @@ if authentication_status:
                 zone_data_table=zone_data_table[zone_data_table['archive']=='x']
             else:
                 zone_data_table=zone_data_table[zone_data_table['archive']!='x']
-            st.write(zone_data_table)
+            #st.write(zone_data_table)
             vrt_clients=np.sort(zone_data_table['client'].unique())
             vrt_client=st.selectbox('Client',vrt_clients)
             vrt_farms=np.sort(zone_data_table[zone_data_table['client']==vrt_client]['farm'].unique())
