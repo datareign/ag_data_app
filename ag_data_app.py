@@ -180,6 +180,7 @@ if authentication_status:
     #fert_analysis=get_gcp_text(gcp_client,bucket_name,fert_analysis_file)
     zone_data_table=get_gcp_csv(gcp_client,bucket_name,zone_data_file)
     zone_data_table=zone_data_table[zone_data_table['active']=='yes']
+    zone_data_table['farm']=zone_data_table['farm'].fillna('None')
     
     if username!='mgriffel':
         #fields=fields[fields['user_name']==username]
