@@ -62,7 +62,7 @@ AGRIMET_STATIONS={'Rexburg, ID':'rxgi','Rigby, ID':'rgbi',
                   'Fort Hall, ID':'fthi','Hamilton, MT':'covm',
                   'Deer Lodge, MT':'drlm'}
 
-AGRIMET_PARAMS={'Avg. Air Temp (F)':'mm','GGD':'tg',
+AGRIMET_PARAMS={'Avg. Air Temp (F)':'mm','GDD':'tg',
                 'Daily Precip. (inches)':'pp',
                 'Avg. Soil Temp (F)':'yw',
                 'Avg. Wind Speed (mph)':'ua',
