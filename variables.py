@@ -121,7 +121,8 @@ AGRIMET_CROP_CODES={'ETr':'REFERENCE EVAPOTRANSPIRATION (KIMBERLY-PENMAN ALFALFA
                   
 SOIL_LAB_KEY={'tx_am':'Texas A&M AgriLife Extension',
               'next_level':'Next Level Ag, LLC',
-              'midwest':'Midwest Laboratories'}
+              'midwest':'Midwest Laboratories',
+              'western':'Western Laboratories'}
 
 LAB_DATA_COLS={'tx_am':['pH',
                         'Conductivity (umho/cm)',
@@ -148,7 +149,13 @@ LAB_DATA_COLS={'tx_am':['pH',
                           'NO3 (ppm)','S (ppm)',
                           'Zn (ppm)','Mn (ppm)',
                           'Fe (ppm)','Cu (ppm)',
-                          'B (ppm)','Soluble Salts (mmhos/cm)']}
+                          'B (ppm)','Soluble Salts (mmhos/cm)'],
+              'western':['pH','CEC','Texture',
+                         'OM (%)','P (ppm)','K (ppm)',
+                         'Mg (ppm)','Ca (ppm)','Na (ppm)',
+                         'Lime (%)','NO3 (ppm)','S (ppm)',
+                         'Zn (ppm)','Mn (ppm)','Fe (ppm)',
+                         'Cu (ppm)','B (ppm)','Soluble Salts (mmhos/cm)']}
 
 LAB_DATA_MAPS={'tx_am':{'Sample ID':'Zone',
                         'Cond':'Conductivity (umho/cm)',
@@ -200,4 +207,20 @@ LAB_DATA_MAPS={'tx_am':{'Sample ID':'Zone',
                           'FE':'Fe (ppm)',
                           'CU':'Cu (ppm)',
                           'B':'B (ppm)',
-                          'SOL SALTS':'Soluble Salts (mmhos/cm)'}}
+                          'SOL SALTS':'Soluble Salts (mmhos/cm)'},
+              'western':{'Grid':'Zone',
+                         '%OM':'OM (%)',
+                         'P':'P (ppm)',
+                         'K':'K (ppm)',
+                         'Mg':'Mg (ppm)',
+                         'Ca':'Ca (ppm)',
+                         'Na':'Na (ppm)',
+                         'Lime':'Lime (%)',
+                         'NO3':'NO3 (ppm)',
+                         'S':'S (ppm)',
+                         'Zn':'Zn (ppm)',
+                         'Mn':'Mn (ppm)',
+                         'Fe':'Fe (ppm)',
+                         'Cu':'Cu (ppm)',
+                         'B':'B (ppm)',
+                         'Salts':'Soluble Salts (mmhos/cm)'}}
