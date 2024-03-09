@@ -122,7 +122,8 @@ AGRIMET_CROP_CODES={'ETr':'REFERENCE EVAPOTRANSPIRATION (KIMBERLY-PENMAN ALFALFA
 SOIL_LAB_KEY={'tx_am':'Texas A&M AgriLife Extension',
               'next_level':'Next Level Ag, LLC',
               'midwest':'Midwest Laboratories',
-              'western':'Western Laboratories'}
+              'western':'Western Laboratories',
+              'waters':'Waters Agricultural Lab'}
 
 LAB_DATA_COLS={'tx_am':['pH',
                         'Conductivity (umho/cm)',
@@ -155,7 +156,11 @@ LAB_DATA_COLS={'tx_am':['pH',
                          'Mg (ppm)','Ca (ppm)','Na (ppm)',
                          'Lime (%)','NO3 (ppm)','S (ppm)',
                          'Zn (ppm)','Mn (ppm)','Fe (ppm)',
-                         'Cu (ppm)','B (ppm)','Soluble Salts (mmhos/cm)']}
+                         'Cu (ppm)','B (ppm)','Soluble Salts (mmhos/cm)'],
+              'waters':['P (lbs/a)','K (lbs/a)','Mg (lbs/a)',
+                        'Ca (lbs/a)','Zn (lbs/a)','Mn (lbs/a)',
+                        'pHw','CEC','Lime','BS-K',
+                        'BS-Mg','BS-Ca','BS-H']}
 
 LAB_DATA_MAPS={'tx_am':{'Sample ID':'Zone',
                         'Cond':'Conductivity (umho/cm)',
@@ -223,4 +228,5 @@ LAB_DATA_MAPS={'tx_am':{'Sample ID':'Zone',
                          'Fe':'Fe (ppm)',
                          'Cu':'Cu (ppm)',
                          'B':'B (ppm)',
-                         'Salts':'Soluble Salts (mmhos/cm)'}}
+                         'Salts':'Soluble Salts (mmhos/cm)'},
+              'waters':{}}
